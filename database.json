@@ -1,0 +1,36 @@
+{
+  "admin_credentials": {
+    "username": "admin@eca.org",
+    "password": "adminpassword123",
+    "role": "SuperAdmin",
+    "createdAt": "2026-10-17"
+  },
+  "members": {
+    "user_unique_id_01": {
+      "name": "Juan Dela Cruz",
+      "email": "user@gmail.com",
+      "course": "BS in Information Technology",
+      "year": "4th Year",
+      "status": "Active",
+      "reason": "To promote civic duty"
+    }
+  },
+  "activities": {
+    "activity_id_01": {
+      "title": "Community Clean-Up Drive 2026",
+      "date": "2026-10-15",
+      "venue": "Barangay Plaza",
+      "description": "Matagumpay na isinagawa ang clean-up drive.",
+      "photos": ["image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png"]
+    }
+  },
+  "attendance": {},
+  "officers": {},
+  "documents": {},
+  "videos": {},
+  "faqs": {},
+  "announcements": {},
+  "ratings": {},
+  "bug_reports": {},
+  "pending": {}
+}

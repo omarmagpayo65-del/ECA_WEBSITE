@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="TkAxAbeiKpY4xcko15tvW1f5qKkEGRMDYB0y4a0WhNU" />
+    <title>Engaged Citizenship Advocacy (ECA)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK Scripts Integration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="theme-light">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="top-header">
+        <div class="logo-container">
+            <img src="image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png" alt="ECA Logo" class="logo-img">
+            <div>
+                <h1 class="site-title">Engaged Citizenship Advocacy</h1>
+                <p class="site-sub">Empowering Communities, Sustaining Action</p>
+            </div>
+        </div>
+        
+        <button class="hamburger-menu-btn" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars" id="hamburger-icon"></i>
+        </button>
+
+        <nav class="main-nav" id="main-nav">
+            <button class="nav-btn active" onclick="showSection('home-page'); playClickSound();"><i class="fa-solid fa-house"></i> Home</button>
+            <button class="nav-btn" onclick="showSection('activities-page'); playClickSound();"><i class="fa-solid fa-newspaper"></i> Activities</button>
+            <button class="nav-btn" onclick="showSection('officers-page'); playClickSound();"><i class="fa-solid fa-users"></i> Officers</button>
+            <button class="nav-btn" onclick="showSection('documents-page'); playClickSound();"><i class="fa-solid fa-file-lines"></i> Documents</button>
+            <button class="nav-btn" onclick="showSection('videos-page'); playClickSound();"><i class="fa-solid fa-play"></i> Premier Video & FAQs</button>
+            <button class="nav-btn" onclick="showSection('about-page'); playClickSound();"><i class="fa-solid fa-circle-info"></i> About</button>
+            <button class="nav-btn" onclick="showSection('privacy-page'); playClickSound();"><i class="fa-solid fa-shield-halved"></i> Privacy</button>
+            <button class="nav-btn highlight" onclick="openModal('register-modal'); playClickSound();"><i class="fa-solid fa-user-plus"></i> Join Us</button>
+            <button class="nav-btn auth" id="auth-btn" onclick="handleAuthButtonClick()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+            <button class="nav-btn admin-badge" id="admin-toggle-btn" style="display:none;" onclick="showSection('admin-dashboard'); playClickSound();"><i class="fa-solid fa-gauge-high"></i> Admin Portal</button>
+            <button class="nav-btn" id="member-portal-btn" style="display:none;" onclick="showSection('member-dashboard'); playClickSound();"><i class="fa-solid fa-user"></i> My Profile</button>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- HOMEPAGE SECTION -->
+        <section id="home-page" class="app-section active">
+            <div class="hero-banner">
+                <div class="hero-text">
+                    <h2>Active Citizenship for Sustainable Change</h2>
+                    <p>Join our mission to promote civic responsibility, youth leadership, and transparent community governance.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="openModal('register-modal'); playClickSound();"><i class="fa-solid fa-hand-holding-heart"></i> Become an Advocate Today</button>
+                        <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound();">Explore Activities</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-bullhorn"></i> Official Announcements</h3>
+                </div>
+                <div id="home-announcements-container"></div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-star" style="color: #ffc107;"></i> Community Ratings & Reviews</h3>
+                </div>
+                <div id="homepage-ratings-container" class="announcements-grid"></div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-newspaper"></i> Latest Activity Feeds & Albums</h3>
+                    <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound();">View All Activities</button>
+                </div>
+                <div id="home-activity-feed" class="announcements-grid"></div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-video"></i> Featured Advocacy Videos</h3>
+                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound();">View All Videos</button>
+                </div>
+                <div id="home-videos-grid" class="video-grid"></div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-file-lines"></i> Recent Official Documents</h3>
+                    <button class="btn btn-secondary" onclick="showSection('documents-page'); playClickSound();">View All Documents</button>
+                </div>
+                <div id="home-documents-grid" class="announcements-grid"></div>
+            </div>
+
+            <div class="section-box">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h3>
+                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound();">View All FAQs</button>
+                </div>
+                <div id="home-faq-container" class="faq-list"></div>
+            </div>
+
+            <div class="form-grid" style="margin-top: 30px;">
+                <div class="section-box" style="margin-bottom: 0;">
+                    <h3><i class="fa-solid fa-star" style="color: #ffc107;"></i> Rate Your User Experience</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Let us know how your experience with our portal has been!</p>
+                    <form id="rating-form" onsubmit="handleRatingSubmit(event)">
+                        <div class="rating-stars">
+                            <i class="fa-solid fa-star" onclick="setRating(1)"></i>
+                            <i class="fa-solid fa-star" onclick="setRating(2)"></i>
+                            <i class="fa-solid fa-star" onclick="setRating(3)"></i>
+                            <i class="fa-solid fa-star" onclick="setRating(4)"></i>
+                            <i class="fa-solid fa-star" onclick="setRating(5)"></i>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="user-feedback-text" rows="2" placeholder="Optional comments or suggestions..." style="font-size: 0.85rem;" oninput="autoCapitalize(this)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;" onclick="playClickSound()">Submit Rating</button>
+                    </form>
+                </div>
+
+                <div class="section-box" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+                    <h3><i class="fa-solid fa-bug" style="color: #dc3545;"></i> Encountered an Issue?</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Help us improve by reporting unexpected glitches or errors on the website.</p>
+                    <button class="btn btn-danger" onclick="openModal('bug-report-modal'); playClickSound();"><i class="fa-solid fa-triangle-exclamation"></i> Report Bug</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about-page" class="app-section">
+            <div class="section-header">
+                <h2>About ECA Advocacy</h2>
+            </div>
+            <div class="section-box">
+                <h3 style="color: #0056b3; margin-bottom: 10px;">What is Engaged Citizenship Advocacy (ECA)?</h3>
+                <p style="margin-bottom: 15px;">Engaged Citizenship Advocacy (ECA) is a dynamic movement dedicated to cultivating active, responsible, and informed citizens. We empower individuals—especially youth leaders—to participate meaningfully in civic governance, promote community accountability, and drive sustainable grassroots development.</p>
+                
+                <div class="form-grid" style="margin-top: 25px;">
+                    <div style="background: rgba(0,86,179,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #0056b3;">
+                        <h4 style="color: #1b365d; margin-bottom: 8px;"><i class="fa-solid fa-bullseye"></i> Our Mission</h4>
+                        <p style="font-size: 0.9rem;">To foster active civic participation through education, community programs, leadership training, and transparent governance initiatives, building resilient communities where every citizen's voice matters.</p>
+                    </div>
+                    <div style="background: rgba(40,167,69,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <h4 style="color: #1b365d; margin-bottom: 8px;"><i class="fa-solid fa-eye"></i> Our Vision</h4>
+                        <p style="font-size: 0.9rem;">A progressive society driven by empowered, socially conscious citizens committed to ethical leadership, sustainable change, and collaborative nation-building.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRIVACY SECTION -->
+        <section id="privacy-page" class="app-section">
+            <div class="section-header">
+                <h2>Privacy Policy & System Permissions</h2>
+            </div>
+            <div class="section-box">
+                <h3 style="margin-bottom: 10px;">Data Privacy & User Protection</h3>
+                <p style="margin-bottom: 15px;">At Engaged Citizenship Advocacy (ECA), we respect your privacy and are committed to protecting your personal data in compliance with data privacy standards.</p>
+                <ul style="padding-left: 20px; margin-bottom: 15px; font-size: 0.95rem;">
+                    <li><strong>Data Collection:</strong> We collect only necessary details during registration strictly for membership verification and community updates.</li>
+                    <li><strong>Account Security:</strong> Passwords are securely handled via Firebase database architecture, and member credentials are restricted to authorized administrators.</li>
+                    <li><strong>Media Permissions:</strong> Photos and videos uploaded to community feeds or albums are moderated and displayed solely for advocacy documentation.</li>
+                    <li><strong>Display Preferences:</strong> You can customize your visual display themes via the settings panel at any time.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- MEMBER DASHBOARD SECTION -->
+        <section id="member-dashboard" class="app-section">
+            <div class="hero-banner" style="padding: 60px 20px; margin-bottom: 20px;">
+                <div class="hero-text">
+                    <h2>Welcome to Engaged Citizenship Advocacy</h2>
+                    <p id="member-welcome-sub">Mabuhay, Advocate!</p>
+                </div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showMemberTab('member-tab-feed'); playClickSound();"><i class="fa-solid fa-newspaper"></i> Community Feed & Uploads</button>
+                <button class="tab-btn" onclick="showMemberTab('member-tab-profile'); playClickSound();"><i class="fa-solid fa-id-card"></i> Edit Profile & Info</button>
+            </div>
+
+            <div id="member-tab-feed" class="admin-tab-content active">
+                <div class="section-box">
+                    <h3><i class="fa-solid fa-cloud-arrow-up"></i> Share Activity, Photos & Videos (Max 500 Pictures per post)</h3>
+                    <form id="member-post-form" onsubmit="handleMemberPost(event)">
+                        <div class="form-group"><label>Post Title / Caption</label><input type="text" id="mem-post-title" required placeholder="Ano ang iyong advocacy update?" oninput="autoCapitalize(this)"></div>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Date</label><input type="date" id="mem-post-date" required></div>
+                            <div class="form-group"><label>Venue / Location</label><input type="text" id="mem-post-venue" required placeholder="Lugar" oninput="autoCapitalize(this)"></div>
+                        </div>
+                        <div class="form-group"><label>Description</label><textarea id="mem-post-desc" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
+                        <div class="form-group"><label>Upload Images / Videos (Up to 500 files)</label><input type="file" id="mem-post-media" accept="image/*,video/*" multiple max="500" onchange="previewMemberMedia(event)">
+                            <div id="mem-media-preview" class="photo-preview-grid"></div>
+                        </div>
+                        <button type="submit" id="member-post-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                            <span class="btn-text">Publish Post</span>
+                            <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Submitting...</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="section-header">
+                    <h3>Community Feed (View, React, Comment)</h3>
+                </div>
+                <div id="member-community-feed"></div>
+            </div>
+
+            <div id="member-tab-profile" class="admin-tab-content">
+                <div class="section-box" style="max-width: 600px; margin: 0 auto;">
+                    <h3>Edit Profile Picture & Personal Information</h3>
+                    <form id="member-profile-form" onsubmit="handleSaveMemberProfile(event)">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <img id="profile-display-img" src="image/ECA~2.jpg" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #0056b3;">
+                            <div style="margin-top: 10px;">
+                                <label class="btn btn-secondary" style="cursor: pointer; display: inline-block;">
+                                    <i class="fa-solid fa-camera"></i> Change Profile Picture
+                                    <input type="file" id="profile-pic-input" accept="image/*" style="display: none;" onchange="previewProfilePic(event)">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Full Name</label><input type="text" id="edit-prof-name" required oninput="validateLettersOnly(this); autoCapitalize(this);"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" id="edit-prof-email" required onblur="validateEmailFormat(this)"></div>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Year Level</label>
+                                <select id="edit-prof-year" required>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Course Program</label>
+                                <select id="edit-prof-course" required>
+                                    <option value="BS in Information Technology">BS in Information Technology</option>
+                                    <option value="BS in Business Management">BS in Business Management</option>
+                                    <option value="BS in Elementary Education">BS in Elementary Education</option>
+                                    <option value="BS in Secondary Education">BS in Secondary Education</option>
+                                    <option value="BS in Agriculture">BS in Agriculture</option>
+                                    <option value="BS in Criminology">BS in Criminology</option>
+                                    <option value="Senior High School">Senior High School</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Reason of Joining</label><textarea id="edit-prof-reason" rows="3" required oninput="validateLettersOnly(this); autoCapitalize(this);"></textarea></div>
+                        <button type="submit" class="btn btn-primary btn-block" onclick="playClickSound()">Save Profile Changes</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="activities-page" class="app-section">
+            <div class="section-header">
+                <h2>Advocacy Activities</h2>
+                <button class="btn btn-primary admin-only" id="top-post-activity-btn" style="display:none;" onclick="openActivityModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Post Activity (Admin Only)</button>
+            </div>
+            <div id="activity-posts-feed"></div>
+        </section>
+
+        <section id="officers-page" class="app-section">
+            <div class="section-header">
+                <h2>Advocacy Leadership Officers</h2>
+                <div class="sy-badge"><span>Status: </span><strong>Active Officer</strong></div>
+            </div>
+            <div class="officers-grid" id="officers-container"></div>
+        </section>
+
+        <section id="documents-page" class="app-section">
+            <div class="section-header">
+                <h2>Document Records & Memorandums</h2>
+                <button class="btn btn-primary admin-only" id="top-upload-doc-btn" style="display:none;" onclick="openDocumentModal(); playClickSound();"><i class="fa-solid fa-upload"></i> Upload Record (Admin Only)</button>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Category</th><th>Title / Description</th><th>Date Uploaded</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="documents-list"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="videos-page" class="app-section">
+            <div class="section-header">
+                <h2>Advocacy Premier & Tutorial FAQs</h2>
+                <button class="btn btn-primary admin-only" id="top-upload-video-btn" style="display:none;" onclick="openVideoModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Upload Primer Video (Admin Only)</button>
+            </div>
+            <h3>Advocacy Video Library</h3>
+            <div class="video-grid" id="all-videos-grid"></div>
+
+            <div class="section-header" style="margin-top: 40px;">
+                <h3>Frequently Asked Questions & Tutorials</h3>
+                <button class="btn btn-primary admin-only" id="top-add-faq-btn" style="display:none;" onclick="openFaqModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Add FAQ (Admin Only)</button>
+            </div>
+            <div class="faq-list" id="faq-container"></div>
+        </section>
+
+        <!-- ADMIN DASHBOARD SECTION -->
+        <section id="admin-dashboard" class="app-section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-gauge"></i> Admin Superior Control Center (Restricted)</h2>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showAdminTab('tab-members'); playClickSound();">Member Directory</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-attendance'); playClickSound();">Member Attendance Logs</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-officers-admin'); playClickSound();">Officers Manager</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-announcements-admin'); playClickSound();">Announcements</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-activities-admin'); playClickSound();">Activities Manager</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-documents-admin'); playClickSound();">Documents Manager</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-videos-admin'); playClickSound();">Video Manager</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-faq-admin'); playClickSound();">FAQ Manager</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-pending'); playClickSound();">Pending Registrations</button>
+                <button class="tab-btn" onclick="showAdminTab('tab-bugs'); playClickSound();">Report Bug Inbox</button>
+            </div>
+
+            <div id="tab-members" class="admin-tab-content active">
+                <h3>All Member User Accounts (Firebase DB Synchronized)</h3>
+                <table class="data-table">
+                    <thead><tr><th>Name</th><th>Email</th><th>Course & Year</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="admin-members-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-attendance" class="admin-tab-content">
+                <h3>Viewable Member Sign-in Attendance Logs (Time In / Time Out & Date)</h3>
+                <table class="data-table">
+                    <thead><tr><th>Member Name</th><th>Email</th><th>Date</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
+                    <tbody id="admin-attendance-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-officers-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Leadership Officers Management</h3>
+                    <button class="btn btn-primary" onclick="openOfficerModal(); playClickSound();"><i class="fa-solid fa-user-plus"></i> Create Officer</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Photo</th><th>Name</th><th>Position</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-officers-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-announcements-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Announcements Management</h3>
+                    <button class="btn btn-primary" onclick="openAnnouncementModal(); playClickSound();"><i class="fa-solid fa-bullhorn"></i> Post Announcement</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>Date</th><th>Content</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-announcements-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-activities-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Activities Post & Album Management (Max 500 Photos)</h3>
+                    <button class="btn btn-primary" onclick="openActivityModal(); playClickSound();"><i class="fa-solid fa-circle-plus"></i> Create Activity Post</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>Date</th><th>Venue</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-activities-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-documents-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Document Records Management</h3>
+                    <button class="btn btn-primary" onclick="openDocumentModal(); playClickSound();"><i class="fa-solid fa-upload"></i> Upload New Document</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Category</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-documents-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-videos-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Primer Video Management</h3>
+                    <button class="btn btn-primary" onclick="openVideoModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Upload Video</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-videos-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-faq-admin" class="admin-tab-content">
+                <div class="section-header">
+                    <h3>Frequently Asked Questions Management</h3>
+                    <button class="btn btn-primary" onclick="openFaqModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Add FAQ</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Question</th><th>Answer</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-faq-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-pending" class="admin-tab-content">
+                <h3>Pending Registration Requests</h3>
+                <table class="data-table">
+                    <thead><tr><th>Full Name</th><th>Email</th><th>Course & Year</th><th>Reason</th><th>Action</th></tr></thead>
+                    <tbody id="pending-requests-table"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-bugs" class="admin-tab-content">
+                <h3>Viewable Report Bug Message Inbox</h3>
+                <table class="data-table">
+                    <thead><tr><th>Date Reported</th><th>Bug Description / Issue</th><th>Action</th></tr></thead>
+                    <tbody id="admin-bug-reports-table"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODALS -->
+    <div id="thankyou-sticker-modal" class="modal">
+        <div class="modal-content" style="text-align: center; max-width: 400px;">
+            <span class="close-btn" onclick="closeModal('thankyou-sticker-modal')">&times;</span>
+            <div class="sticker-popup">
+                <div class="sticker-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h2 style="color: #1b365d; margin-bottom: 10px;">Thank You!</h2>
+                <p style="color: #666; margin-bottom: 20px;">Your rating and feedback have been successfully submitted.</p>
+                <button class="btn btn-primary btn-block" onclick="closeModal('thankyou-sticker-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bug-report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('bug-report-modal')">&times;</span>
+            <div class="modal-header"><h2>Report Portal Issue / Bug</h2></div>
+            <form id="bug-report-form" onsubmit="handleBugReport(event)">
+                <div class="form-group">
+                    <label>Describe the bug or unexpected behavior:</label>
+                    <textarea id="bug-desc-input" rows="4" required placeholder="Please provide details about what went wrong..." oninput="autoCapitalize(this)"></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger btn-block">Send Bug Report</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="officer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('officer-modal')">&times;</span>
+            <div class="modal-header"><h2 id="officer-modal-title">Create Officer</h2></div>
+            <form id="officer-form" onsubmit="handleSaveOfficer(event)">
+                <input type="hidden" id="officer-edit-id">
+                <div class="form-group"><label>Officer Name:</label><input type="text" id="officer-name" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Position:</label><input type="text" id="officer-position" required placeholder="Hal. President, Secretary" oninput="autoCapitalize(this)"></div>
+                <div class="form-group">
+                    <label>Officer Photo:</label>
+                    <input type="file" id="officer-photo-input" accept="image/*" onchange="previewOfficerPhoto(event)">
+                    <div style="margin-top: 10px; text-align: center;">
+                        <img id="officer-photo-preview" src="image/ECA~2.jpg" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Officer</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="image-lightbox-modal" class="modal" onclick="closeLightbox()">
+        <span class="close-btn">&times;</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightbox-img-element" src="" alt="Enlarged Album Photo">
+            <div class="lightbox-actions">
+                <a id="lightbox-download-btn" href="" download="eca-photo.jpg" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Photo</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="document-preview-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close-btn" onclick="closeModal('document-preview-modal')">&times;</span>
+            <div class="modal-header"><h2 id="doc-preview-title">Document Preview</h2></div>
+            <div id="doc-preview-body" style="padding: 15px; text-align: center;">
+                <p id="doc-preview-desc"></p>
+                <div id="doc-preview-frame-container" style="margin-top: 15px;"></div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <a id="doc-modal-download-btn" href="" download class="btn btn-success btn-block"><i class="fa-solid fa-download"></i> Download Document</a>
+                <button class="btn btn-secondary btn-block" onclick="closeModal('document-preview-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="announcement-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('announcement-modal')">&times;</span>
+            <div class="modal-header"><h2>Post / Edit Announcement</h2></div>
+            <form id="announcement-form" onsubmit="handleSaveAnnouncement(event)">
+                <input type="hidden" id="announcement-edit-id">
+                <div class="form-group"><label>Announcement Title:</label><input type="text" id="announcement-title" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Date:</label><input type="date" id="announcement-date" required></div>
+                <div class="form-group"><label>Content / Message:</label><textarea id="announcement-content" rows="4" required oninput="autoCapitalize(this)"></textarea></div>
+                <button type="submit" class="btn btn-primary btn-block">Publish Announcement</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="activity-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close-btn" onclick="closeModal('activity-modal')">&times;</span>
+            <div class="modal-header"><h2 id="act-modal-title">Create Activity Post (Max 500 Photos)</h2></div>
+            <form id="activity-form" onsubmit="handleSaveActivity(event)">
+                <input type="hidden" id="act-edit-id">
+                <div class="form-group"><label>Title:</label><input type="text" id="act-title" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Date:</label><input type="date" id="act-date" required></div>
+                <div class="form-group"><label>Venue:</label><input type="text" id="act-venue" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Description:</label><textarea id="act-desc" rows="4" required oninput="autoCapitalize(this)"></textarea></div>
+                <div class="form-group">
+                    <label>Photos (Album Format - Up to 500):</label>
+                    <input type="file" id="act-photos" accept="image/*,video/*" multiple max="500" onchange="previewActivityPhotos(event)">
+                    <div id="act-photo-preview-container" class="photo-preview-grid"></div>
+                </div>
+                <button type="submit" id="admin-publish-act-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                    <span class="btn-text">Publish Activity</span>
+                    <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Publishing Photos...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="document-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('document-modal')">&times;</span>
+            <div class="modal-header"><h2 id="doc-modal-title">Upload Official Document</h2></div>
+            <form id="document-form" onsubmit="handleSaveDocument(event)">
+                <input type="hidden" id="doc-edit-id">
+                <div class="form-group"><label>Category:</label><input type="text" id="doc-category" required placeholder="Hal. Resolution, Memo" oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Title / Description:</label><input type="text" id="doc-title" required placeholder="Pamagat ng dokumento" oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Document Link / File URL or Data:</label><input type="text" id="doc-url" required placeholder="https://... o text/file path"></div>
+                <button type="submit" class="btn btn-primary btn-block">Save Document</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('video-modal')">&times;</span>
+            <div class="modal-header"><h2 id="vid-modal-title">Upload Primer Video</h2></div>
+            <form id="video-form" onsubmit="handleSaveVideo(event)">
+                <input type="hidden" id="vid-edit-index">
+                <div class="form-group"><label>Video Title:</label><input type="text" id="vid-title" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>YouTube Embed URL:</label><input type="text" id="vid-url" required placeholder="https://www.youtube.com/embed/ID"></div>
+                <div class="form-group"><label>Description:</label><textarea id="vid-desc" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
+                <button type="submit" class="btn btn-primary btn-block">Save Video</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="faq-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('faq-modal')">&times;</span>
+            <div class="modal-header"><h2 id="faq-modal-title">Add Frequently Asked Question</h2></div>
+            <form id="faq-form" onsubmit="handleSaveFaq(event)">
+                <input type="hidden" id="faq-edit-index">
+                <div class="form-group"><label>Question:</label><input type="text" id="faq-question" required oninput="autoCapitalize(this)"></div>
+                <div class="form-group"><label>Answer:</label><textarea id="faq-answer" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
+                <button type="submit" class="btn btn-primary btn-block">Save FAQ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-btn" onclick="closeModal('login-modal')">&times;</span>
+            <div class="login-brand-header" style="margin-bottom: 20px;">
+                <img src="image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png" alt="ECA Logo" style="width: 70px; height: 70px; object-fit: contain; border-radius: 50%; border: 2px solid #0056b3; margin-bottom: 10px;">
+                <h2 style="color: #1b365d; font-size: 1.5rem;">Engaged Citizenship Advocacy</h2>
+                <p style="font-size: 0.9rem; color: #666;">Sign in to your account</p>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)" style="text-align: left;">
+                <div class="form-group"><label>Email Address</label><input type="email" id="login-email" required placeholder="admin@eca.org or user@gmail.com" onblur="validateEmailFormat(this)"></div>
+                <div class="form-group" style="position: relative;">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required minlength="6" style="padding-right: 40px;">
+                    <span onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" style="position: absolute; right: 12px; top: 38px; cursor: pointer; color: #666;">
+                        <i id="login-eye-icon" class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="triggerBiometricLogin()"><i class="fa-solid fa-fingerprint"></i> Biometric Login</button>
+                    <a href="#" onclick="alert('Password reset link sent to your email.'); return false;" style="font-size: 0.85rem; color: #0056b3; text-decoration: none;">Forgot Password?</a>
+                </div>
+                <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                    <span class="btn-text">Login</span>
+                    <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Authenticating...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- REGISTRATION MODAL -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close-btn" onclick="closeModal('register-modal')">&times;</span>
+            <div class="modal-header" style="text-align: center; margin-bottom: 15px;">
+                <img src="image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png" alt="ECA Logo" style="width: 60px; height: 60px; object-fit: contain; border-radius: 50%; border: 2px solid #0056b3; margin-bottom: 5px;">
+                <h2 style="color: #1b365d;">Engaged Citizenship Advocacy</h2>
+                <p style="color: #666; font-size: 0.9rem;">Registration Form</p>
+            </div>
+            <form id="registration-form" onsubmit="handleRegistration(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="reg-firstname" required oninput="validateLettersOnly(this); autoCapitalize(this);">
+                    </div>
+                    <div class="form-group">
+                        <label>Middle Name</label>
+                        <input type="text" id="reg-middlename" oninput="validateLettersOnly(this); autoCapitalize(this);">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="reg-lastname" required oninput="validateLettersOnly(this); autoCapitalize(this);">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="text" id="reg-email" required onblur="validateEmailFormat(this)" placeholder="email@gmail.com">
+                    </div>
+                    <div class="form-group" style="position: relative;">
+                        <label>Password (at least 6 characters)</label>
+                        <input type="password" id="reg-password" required minlength="6" style="padding-right: 40px;">
+                        <span onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" style="position: absolute; right: 12px; top: 38px; cursor: pointer; color: #666;">
+                            <i id="reg-eye-icon" class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth (DOB)</label>
+                        <input type="date" id="reg-dob" required onchange="calculateAge()">
+                    </div>
+                    <div class="form-group">
+                        <label>Age (Auto-calculated)</label>
+                        <input type="text" id="reg-age" readonly placeholder="Calculated automatically">
+                    </div>
+                    <div class="form-group">
+                        <label>Year Level</label>
+                        <select id="reg-year" required>
+                            <option value="">Select Year Level</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Course Program</label>
+                        <select id="reg-course" required>
+                            <option value="">Select Course</option>
+                            <option value="BS in Information Technology">BS in Information Technology</option>
+                            <option value="BS in Business Management">BS in Business Management</option>
+                            <option value="BS in Elementary Education">BS in Elementary Education</option>
+                            <option value="BS in Secondary Education">BS in Secondary Education</option>
+                            <option value="BS in Agriculture">BS in Agriculture</option>
+                            <option value="BS in Criminology">BS in Criminology</option>
+                            <option value="Senior High School">Senior High School</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Reason for Joining (Letters Only)</label>
+                        <textarea id="reg-reason" required oninput="validateLettersOnly(this); autoCapitalize(this);"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: normal; font-size: 0.85rem;">
+                        <input type="checkbox" id="reg-terms" required> I agree to the <a href="#" onclick="alert('Terms & Conditions: Respect community rules and engage in active advocacy.'); return false;">Terms & Conditions</a>
+                    </label>
+                </div>
+                <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                    <span class="btn-text">Submit Application Direct to Admin</span>
+                    <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Submitting to Firebase...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content" style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <p>&copy; 2026 Engaged Citizenship Advocacy (ECA). All rights reserved.</p>
+            <div class="theme-selector-wrapper" style="display: flex; align-items: center; gap: 8px;">
+                <label for="theme-selector" style="font-size: 0.85rem;"><i class="fa-solid fa-palette"></i> Theme:</label>
+                <select id="theme-selector" onchange="changeTheme(this.value); playClickSound();" style="padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="nature">Nature / Green</option>
+                    <option value="royal">Royal Navy</option>
+                    <option value="sunset">Sunset Warmth</option>
+                    <option value="cyberpunk">Cyberpunk Neon</option>
+                    <option value="emerald">Emerald Lush</option>
+                    <option value="lavender">Lavender Dream</option>
+                    <option value="coffee">Coffee Mocha</option>
+                    <option value="crimson">Crimson Night</option>
+                    <option value="arctic">Arctic Frost</option>
+                </select>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
