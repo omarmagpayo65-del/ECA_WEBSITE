@@ -18,7 +18,7 @@
     <header class="top-header">
         <div class="logo-container">
             <img src="image/ECA Image1 Aug 10, 2026, 09_23_42 AM.png" alt="ECA Logo" class="logo-img">
-            <div>
+            <div class="title-wrapper">
                 <h1 class="site-title">Engaged Citizenship Advocacy</h1>
                 <p class="site-sub">Empowering Communities, Sustaining Action</p>
             </div>
@@ -321,18 +321,22 @@
 
             <div id="tab-members" class="admin-tab-content active">
                 <h3>All Member User Accounts (Firebase DB Synchronized)</h3>
-                <table class="data-table">
-                    <thead><tr><th>Name</th><th>Email</th><th>Course & Year</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="admin-members-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Course & Year</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="admin-members-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-attendance" class="admin-tab-content">
                 <h3>Viewable Member Sign-in Attendance Logs (Time In / Time Out & Date)</h3>
-                <table class="data-table">
-                    <thead><tr><th>Member Name</th><th>Email</th><th>Date</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
-                    <tbody id="admin-attendance-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Member Name</th><th>Email</th><th>Date</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
+                        <tbody id="admin-attendance-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-officers-admin" class="admin-tab-content">
@@ -340,10 +344,12 @@
                     <h3>Leadership Officers Management</h3>
                     <button class="btn btn-primary" onclick="openOfficerModal(); playClickSound();"><i class="fa-solid fa-user-plus"></i> Create Officer</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Photo</th><th>Name</th><th>Position</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-officers-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Photo</th><th>Name</th><th>Position</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-officers-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-announcements-admin" class="admin-tab-content">
@@ -351,10 +357,12 @@
                     <h3>Announcements Management</h3>
                     <button class="btn btn-primary" onclick="openAnnouncementModal(); playClickSound();"><i class="fa-solid fa-bullhorn"></i> Post Announcement</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Title</th><th>Date</th><th>Content</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-announcements-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Date</th><th>Content</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-announcements-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-activities-admin" class="admin-tab-content">
@@ -362,10 +370,12 @@
                     <h3>Activities Post & Album Management (Max 500 Photos)</h3>
                     <button class="btn btn-primary" onclick="openActivityModal(); playClickSound();"><i class="fa-solid fa-circle-plus"></i> Create Activity Post</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Title</th><th>Date</th><th>Venue</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-activities-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Date</th><th>Venue</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-activities-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-documents-admin" class="admin-tab-content">
@@ -373,10 +383,12 @@
                     <h3>Document Records Management</h3>
                     <button class="btn btn-primary" onclick="openDocumentModal(); playClickSound();"><i class="fa-solid fa-upload"></i> Upload New Document</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Category</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-documents-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Category</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-documents-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-videos-admin" class="admin-tab-content">
@@ -384,10 +396,12 @@
                     <h3>Primer Video Management</h3>
                     <button class="btn btn-primary" onclick="openVideoModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Upload Video</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-videos-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-videos-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-faq-admin" class="admin-tab-content">
@@ -395,26 +409,32 @@
                     <h3>Frequently Asked Questions Management</h3>
                     <button class="btn btn-primary" onclick="openFaqModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Add FAQ</button>
                 </div>
-                <table class="data-table">
-                    <thead><tr><th>Question</th><th>Answer</th><th>Actions</th></tr></thead>
-                    <tbody id="admin-faq-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Question</th><th>Answer</th><th>Actions</th></tr></thead>
+                        <tbody id="admin-faq-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-pending" class="admin-tab-content">
                 <h3>Pending Registration Requests</h3>
-                <table class="data-table">
-                    <thead><tr><th>Full Name</th><th>Email</th><th>Course & Year</th><th>Reason</th><th>Action</th></tr></thead>
-                    <tbody id="pending-requests-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Full Name</th><th>Email</th><th>Course & Year</th><th>Reason</th><th>Action</th></tr></thead>
+                        <tbody id="pending-requests-table"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="tab-bugs" class="admin-tab-content">
                 <h3>Viewable Report Bug Message Inbox</h3>
-                <table class="data-table">
-                    <thead><tr><th>Date Reported</th><th>Bug Description / Issue</th><th>Action</th></tr></thead>
-                    <tbody id="admin-bug-reports-table"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Date Reported</th><th>Bug Description / Issue</th><th>Action</th></tr></thead>
+                        <tbody id="admin-bug-reports-table"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -485,7 +505,7 @@
                 <p id="doc-preview-desc"></p>
                 <div id="doc-preview-frame-container" style="margin-top: 15px;"></div>
             </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
                 <a id="doc-modal-download-btn" href="" download class="btn btn-success btn-block"><i class="fa-solid fa-download"></i> Download Document</a>
                 <button class="btn btn-secondary btn-block" onclick="closeModal('document-preview-modal')">Close</button>
             </div>
@@ -588,7 +608,7 @@
                         <i id="login-eye-icon" class="fa-solid fa-eye"></i>
                     </span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 8px;">
                     <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="triggerBiometricLogin()"><i class="fa-solid fa-fingerprint"></i> Biometric Login</button>
                     <a href="#" onclick="alert('Password reset link sent to your email.'); return false;" style="font-size: 0.85rem; color: #0056b3; text-decoration: none;">Forgot Password?</a>
                 </div>
