@@ -690,7 +690,7 @@ function deleteOfficer(id) {
     }
 }
 
-// ACTIVITIES MANAGER - FIXED SUNOD-SUNOD NA POST AT MARAMING PICTURES
+// ACTIVITIES MANAGER
 let temporarySelectedPhotos = [];
 function previewActivityPhotos(e) {
     const files = e.target.files;
@@ -735,7 +735,6 @@ function openActivityModal(id = null) {
     openModal('activity-modal');
 }
 
-// ADMIN PUBLISH ACTIVITY WITH LOADING SPINNER & FULLY FUNCTIONAL MULTI-PHOTO SUPPORT
 function handleSaveActivity(e) {
     e.preventDefault();
     if (!currentUser || currentUser.role !== 'admin') return;
@@ -754,7 +753,6 @@ function handleSaveActivity(e) {
     setTimeout(() => {
         const actId = id ? id : 'act_' + Date.now();
         
-        // Retrieve existing photos if editing and no new photos selected
         let finalPhotos = [...temporarySelectedPhotos];
         if (id && finalPhotos.length === 0) {
             const existingPost = activityPosts.find(p => p.id == id);
@@ -869,7 +867,6 @@ function handleSaveVideo(e) {
     }
 
     const videoObj = { title, embedUrl, description };
-    // Update array and push to Firebase
     if (index !== "") {
         advocacyVideos[index] = videoObj;
     } else {
@@ -1175,7 +1172,7 @@ function renderAll() {
                 `).join('')}
             </div>
 
-            <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #eee; padding-top: 10px;">
+            <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #eee; padding-top: 10px; flex-wrap: wrap;">
                 <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 4px 10px;" onclick="addReaction('${post.id}', 'like')">
                     <i class="fa-solid fa-thumbs-up"></i> Like (${post.reactions ? post.reactions.like : 0})
                 </button>
@@ -1193,13 +1190,13 @@ function renderAll() {
                         </div>
                     `).join('')}
                 </div>
-                <form onsubmit="addComment('${post.id}', event)" style="display: flex; gap: 8px;">
-                    <input type="text" id="comment-input-${post.id}" placeholder="Mag-iwan ng komento..." required style="flex: 1; padding: 6px 10px; font-size: 0.85rem; border: 1px solid #ccc; border-radius: 4px;" oninput="autoCapitalize(this)">
+                <form onsubmit="addComment('${post.id}', event)" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <input type="text" id="comment-input-${post.id}" placeholder="Mag-iwan ng komento..." required style="flex: 1; min-width: 200px; padding: 6px 10px; font-size: 0.85rem; border: 1px solid #ccc; border-radius: 4px;" oninput="autoCapitalize(this)">
                     <button type="submit" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.85rem;">I-send</button>
                 </form>
             </div>
 
-            ${isAdmin ? `<div style="margin-top:15px;"><button class="btn btn-secondary" onclick="openActivityModal('${post.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteActivity('${post.id}')">Delete</button></div>` : ''}
+            ${isAdmin ? `<div style="margin-top:15px; display:flex; gap:8px;"><button class="btn btn-secondary" onclick="openActivityModal('${post.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteActivity('${post.id}')">Delete</button></div>` : ''}
         </div>
     `).join('');
 
@@ -1256,7 +1253,7 @@ function renderAll() {
             <div class="video-iframe-wrapper"><iframe src="${vid.embedUrl}" allowfullscreen></iframe></div>
             <h4>${vid.title}</h4>
             <p>${vid.description}</p>
-            ${isAdmin ? `<div style="margin-top:10px;"><button class="btn btn-secondary" onclick="openVideoModal(${idx})">Edit</button> <button class="btn btn-danger" onclick="deleteVideo(${idx})">Delete</button></div>` : ''}
+            ${isAdmin ? `<div style="margin-top:10px; display:flex; gap:8px;"><button class="btn btn-secondary" onclick="openVideoModal(${idx})">Edit</button> <button class="btn btn-danger" onclick="deleteVideo(${idx})">Delete</button></div>` : ''}
         </div>
     `).join('');
     if (homeVideos) homeVideos.innerHTML = vidHTML;
@@ -1277,8 +1274,10 @@ function renderAll() {
             <td>${doc.title}</td>
             <td>${doc.date}</td>
             <td>
-                <button class="btn btn-primary" style="padding:4px 8px; font-size:0.8rem;" onclick="previewDocument('${doc.title.replace(/'/g, "\\'")}', '${doc.url}', '${doc.category}')"><i class="fa-solid fa-eye"></i> Preview</button>
-                <a href="${doc.url}" download="${doc.title.replace(/\s+/g, '_')}" class="btn btn-success" style="padding:4px 8px; font-size:0.8rem; text-decoration:none;"><i class="fa-solid fa-download"></i> Download</a>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn btn-primary" style="padding:4px 8px; font-size:0.8rem;" onclick="previewDocument('${doc.title.replace(/'/g, "\\'")}', '${doc.url}', '${doc.category}')"><i class="fa-solid fa-eye"></i> Preview</button>
+                    <a href="${doc.url}" download="${doc.title.replace(/\s+/g, '_')}" class="btn btn-success" style="padding:4px 8px; font-size:0.8rem; text-decoration:none;"><i class="fa-solid fa-download"></i> Download</a>
+                </div>
             </td>
         </tr>
     `).join('');
@@ -1304,7 +1303,7 @@ function renderAll() {
         <div class="faq-item">
             <h4>${faq.question}</h4>
             <p>${faq.answer}</p>
-            ${isAdmin ? `<div style="margin-top:8px;"><button class="btn btn-secondary" style="padding:3px 8px; font-size:0.75rem;" onclick="openFaqModal(${idx})">Edit</button> <button class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteFaq(${idx})">Delete</button></div>` : ''}
+            ${isAdmin ? `<div style="margin-top:8px; display:flex; gap:8px;"><button class="btn btn-secondary" style="padding:3px 8px; font-size:0.75rem;" onclick="openFaqModal(${idx})">Edit</button> <button class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteFaq(${idx})">Delete</button></div>` : ''}
         </div>
     `).join('');
     if (faqContainer) faqContainer.innerHTML = faqHTML;
@@ -1351,8 +1350,10 @@ function renderAll() {
                         <td>${req.course} (${req.year})</td>
                         <td>${req.reason}</td>
                         <td>
-                            <button class="btn btn-success" style="padding:4px 8px; font-size:0.8rem;" onclick="approveMember('${key}')"><i class="fa-solid fa-check"></i> Approve</button>
-                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="removePendingMember('${key}')"><i class="fa-solid fa-xmark"></i> Remove</button>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <button class="btn btn-success" style="padding:4px 8px; font-size:0.8rem;" onclick="approveMember('${key}')"><i class="fa-solid fa-check"></i> Approve</button>
+                                <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="removePendingMember('${key}')"><i class="fa-solid fa-xmark"></i> Remove</button>
+                            </div>
                         </td>
                     </tr>
                 `).join('');
