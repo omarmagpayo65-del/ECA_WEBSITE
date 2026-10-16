@@ -78,10 +78,21 @@ function initFirebaseRealtimeSync() {
             {
                 id: 1,
                 title: "Engaged and Empowered: ECA Team Building 2025",
-                date: "2025-01-05",
+                date: "2025-05-01",
                 venue: "Bigo Beach Sta. Magdalena",
                 description: "Engaged and Empowered: ECA Team Building 2025 <br>The Engaged Citizenship Advocates of Veritas College of Irosin came together for a dynamic and purpose-driven Team Building Activity led by their Lead Advocate, Sir John Oliver G. Mimay, last May 1-2, 2025 at Bigo Beach, Sta. Magdalena. The activity brought advocates closer not just in camaraderie, but in their shared mission of promoting responsible, participatory Citizenship. One of the key moments of the day was the ratification of the ECA Constitution and By-Laws (ECA-CBL)—a milestone in formalizing the group’s structure and direction. <br>They also engaged in fun and challenging team building games, enjoyed vibrant socials and a celebration party, and capped the event with a planning session for future civic initiatives. <br>To cap it all off, an awarding ceremony was held to recognize the efforts and participation of the advocates—celebrating excellence, teamwork, and the spirit of leadership. With stronger bonds and a clearer vision, <br>the ECA stands ready to lead the way in fostering active engagement, informed participation, and empowered youth leadership in the community.<br>#ECA2025 <br>#EngagedCitizenshipAdvocacy.",
-                photos: ["image/FB_IMG_1791726404914.jpg", "image/FB_IMG_1791726408424.jpg", "image/FB_IMG_1791726411741.jpg", "image/FB_IMG_1791726435471.jpg", "image/FB_IMG_1791726466493.jpg", "image/FB_IMG_1791726487644.jpg", "image/FB_IMG_1791726492050.jpg", "image/FB_IMG_1791726498298.jpg", "image/FB_IMG_1791726494546.jpg", "image/FB_IMG_1791726506259.jpg" ],
+                photos: [
+                    "image/FB_IMG_1791726404914.jpg", 
+                    "image/FB_IMG_1791726408424.jpg", 
+                    "image/FB_IMG_1791726411741.jpg", 
+                    "image/FB_IMG_1791726435471.jpg", 
+                    "image/FB_IMG_1791726466493.jpg", 
+                    "image/FB_IMG_1791726487644.jpg", 
+                    "image/FB_IMG_1791726492050.jpg", 
+                    "image/FB_IMG_1791726498298.jpg", 
+                    "image/FB_IMG_1791726494546.jpg", 
+                    "image/FB_IMG_1791726506259.jpg"
+                ],
                 reactions: { like: 15, heart: 8 },
                 comments: [{ name: "Admin", text: "amazing ECA!" }]
             }
