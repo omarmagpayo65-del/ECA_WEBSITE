@@ -1,3 +1,7 @@
+// ==========================================
+// UPDATED SCRIPT.JS FOR ECA PORTAL
+// ==========================================
+
 let currentUser = null;
 
 const firebaseConfig = {
@@ -32,6 +36,8 @@ let advocacyVideos = [];
 let documentsList = [];
 let faqList = [];
 let announcementsList = [];
+let meetingCodesList = [];
+let messagesList = [];
 
 // Real-time listener sync with Firebase Database
 function initFirebaseRealtimeSync() {
@@ -41,6 +47,7 @@ function initFirebaseRealtimeSync() {
             { id: 1, name: "Juan Dela Cruz", email: "user@gmail.com", year: "4th Year", course: "BS in Information Technology", status: "Active", reason: "To promote civic duty" }
         ];
         renderAll();
+        populateAdminRecipientSelect();
     });
 
     db.ref('pending').on('value', snapshot => {
@@ -52,6 +59,18 @@ function initFirebaseRealtimeSync() {
     db.ref('attendance').on('value', snapshot => {
         const data = snapshot.val();
         attendanceLogs = data ? Object.values(data) : [];
+        renderAll();
+    });
+
+    db.ref('meeting_codes').on('value', snapshot => {
+        const data = snapshot.val();
+        meetingCodesList = data ? Object.values(data) : [];
+        renderAll();
+    });
+
+    db.ref('messages').on('value', snapshot => {
+        const data = snapshot.val();
+        messagesList = data ? Object.values(data) : [];
         renderAll();
     });
 
@@ -80,18 +99,10 @@ function initFirebaseRealtimeSync() {
                 title: "Engaged and Empowered: ECA Team Building 2025",
                 date: "2025-05-01",
                 venue: "Bigo Beach Sta. Magdalena",
-                description: "Engaged and Empowered: ECA Team Building 2025 The Engaged Citizenship Advocates of Veritas College of Irosin came together for a dynamic and purpose-driven Team Building Activity led by their Lead Advocate, Sir John Oliver G. Mimay, last May 1-2, 2025 at Bigo Beach, Sta. Magdalena. The activity brought advocates closer not just in camaraderie, but in their shared mission of promoting responsible, participatory Citizenship. One of the key moments of the day was the ratification of the ECA Constitution and By-Laws (ECA-CBL)—a milestone in formalizing the group’s structure and direction. They also engaged in fun and challenging team building games, enjoyed vibrant socials and a celebration party, and capped the event with a planning session for future civic initiatives. To cap it all off, an awarding ceremony was held to recognize the efforts and participation of the advocates—celebrating excellence, teamwork, and the spirit of leadership. With stronger bonds and a clearer vision, the ECA stands ready to lead the way in fostering active engagement, informed participation, and empowered youth leadership in the community. #ECA2025 #EngagedCitizenshipAdvocacy.",
+                description: "Engaged and Empowered: ECA Team Building 2025...",
                 photos: [
                     "image/FB_IMG_1791726404914.jpg", 
-                    "image/FB_IMG_1791726408424.jpg", 
-                    "image/FB_IMG_1791726411741.jpg", 
-                    "image/FB_IMG_1791726435471.jpg", 
-                    "image/FB_IMG_1791726466493.jpg", 
-                    "image/FB_IMG_1791726487644.jpg", 
-                    "image/FB_IMG_1791726492050.jpg", 
-                    "image/FB_IMG_1791726498298.jpg", 
-                    "image/FB_IMG_1791726494546.jpg", 
-                    "image/FB_IMG_1791726506259.jpg"
+                    "image/FB_IMG_1791726408424.jpg"
                 ],
                 reactions: { like: 15, heart: 8 },
                 comments: [{ name: "Admin", text: "amazing ECA!" }]
@@ -140,7 +151,7 @@ function playClickSound() {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime); // Standard normal pitch A4
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.05);
         gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
@@ -148,9 +159,7 @@ function playClickSound() {
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.05);
-    } catch (e) {
-        // Audio policy exception handled silently
-    }
+    } catch (e) {}
 }
 
 // AUTO CAPITALIZED FIRST LETTER IN ALL INPUT FIELDS
@@ -176,7 +185,58 @@ function toggleMobileNav() {
     }
 }
 
-// THEME SELECTOR HANDLER (11 Themes Included)
+// GLOBAL FULL-INTERFACE SPINNER HELPER FUNCTION
+function triggerGlobalSpinner() {
+    const overlay = document.getElementById('global-loading-overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 900);
+    }
+}
+
+// ERROR MODAL AUTOMATIC FULL-INTERFACE DISPLAY FUNCTION
+function showCustomErrorModal(errorMessage) {
+    const errorModalMessage = document.getElementById('error-modal-message');
+    if (errorModalMessage) {
+        errorModalMessage.innerText = errorMessage;
+    }
+    const errorModal = document.getElementById('error-modal');
+    if (errorModal) {
+        errorModal.style.display = 'flex';
+    }
+}
+
+// AUTOMATICALLY TRIGGER FULL-INTERFACE SPINNER ON EVERY BUTTON CLICK
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (btn) {
+        triggerGlobalSpinner();
+        checkAllButtonsClicked();
+    }
+});
+
+// TRACK ALL BUTTON CLICKS FOR AUTO PLAY VIDEO REQUIREMENT
+let clickedButtonsSet = new Set();
+function checkAllButtonsClicked() {
+    const allButtons = document.querySelectorAll('button');
+    if (clickedButtonsSet.size >= allButtons.length) {
+        enableAutoPlayVideo();
+    }
+}
+
+function enableAutoPlayVideo() {
+    const videoIframes = document.querySelectorAll('.video-iframe-wrapper iframe, .video-card iframe');
+    videoIframes.forEach(iframe => {
+        let currentSrc = iframe.src;
+        if (!currentSrc.includes('autoplay=1')) {
+            iframe.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+        }
+    });
+}
+
+// THEME SELECTOR HANDLER
 function changeTheme(themeName) {
     document.body.className = `theme-${themeName}`;
     localStorage.setItem('eca_theme', themeName);
@@ -190,12 +250,12 @@ window.addEventListener('DOMContentLoaded', () => {
     initFirebaseRealtimeSync();
 });
 
-// VALIDATORS
+// VALIDATORS WITH CUSTOM ERROR MODAL INTEGRATION
 function validateLettersOnly(inputElement) {
     const originalValue = inputElement.value;
     const cleanedValue = originalValue.replace(/[^a-zA-Z\sñÑ]/g, '');
     if (originalValue !== cleanedValue) {
-        alert("Error! Please input letters only.");
+        showCustomErrorModal("Error! Please input letters only.");
         inputElement.value = cleanedValue;
     }
 }
@@ -204,7 +264,7 @@ function validateEmailFormat(inputElement) {
     const emailVal = inputElement.value.trim();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (emailVal !== "" && !emailRegex.test(emailVal)) {
-        alert("Error! Please input a valid email address format.");
+        showCustomErrorModal("Error! Please input a valid email address format.");
     }
 }
 
@@ -282,7 +342,8 @@ function recordAttendanceLogin(name, email) {
         date: now.toLocaleDateString(),
         timeIn: now.toLocaleTimeString(),
         timeOut: "Active Session",
-        status: "Signed In"
+        status: "Signed In",
+        type: "System Login"
     };
     db.ref('attendance/' + newLog.id).set(newLog);
 }
@@ -331,7 +392,20 @@ function calculateAge() {
     document.getElementById('reg-age').value = age >= 0 ? age : 0;
 }
 
-// REGISTRATION FORM WITH DUPLICATION CHECK & LOADING SPINNER
+function calculateEditAge() {
+    const dobVal = document.getElementById('edit-prof-dob').value;
+    if (!dobVal) return;
+    const dob = new Date(dobVal);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    document.getElementById('edit-prof-age').value = age >= 0 ? age : 0;
+}
+
+// REGISTRATION FORM
 function handleRegistration(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('reg-submit-btn');
@@ -351,10 +425,9 @@ function handleRegistration(e) {
     const age = document.getElementById('reg-age').value;
 
     setTimeout(() => {
-        // DUPLICATION CHECK
         const emailExists = members.some(m => m.email === email) || pendingRequests.some(p => p.email === email);
         if (emailExists) {
-            alert("Error! Duplicate Data: An account with this email already exists in Firebase database.");
+            showCustomErrorModal("Error! Duplicate Data: An account with this email already exists in Firebase database.");
             submitBtn.querySelector('.btn-text').style.display = 'inline-block';
             submitBtn.querySelector('.spinner').style.display = 'none';
             submitBtn.disabled = false;
@@ -365,6 +438,9 @@ function handleRegistration(e) {
         const newMemberReq = {
             id: reqId,
             name: `${fname} ${mname ? mname + ' ' : ''}${lname}`,
+            firstname: fname,
+            middlename: mname,
+            lastname: lname,
             email,
             password,
             year,
@@ -384,7 +460,7 @@ function handleRegistration(e) {
             submitBtn.querySelector('.spinner').style.display = 'none';
             submitBtn.disabled = false;
         }).catch(err => {
-            alert("Error connecting to Firebase: " + err.message);
+            showCustomErrorModal("Error connecting to Firebase: " + err.message);
             submitBtn.querySelector('.btn-text').style.display = 'inline-block';
             submitBtn.querySelector('.spinner').style.display = 'none';
             submitBtn.disabled = false;
@@ -392,7 +468,7 @@ function handleRegistration(e) {
     }, 800);
 }
 
-// LOGIN FORM WITH LOADING SPINNER
+// LOGIN FORM
 function handleLogin(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('login-submit-btn');
@@ -420,7 +496,7 @@ function handleLogin(e) {
         } else {
             let foundMember = members.find(m => m.email === email);
             if (!foundMember) {
-                alert("Account not found or pending admin approval.");
+                showCustomErrorModal("Account not found or pending admin approval.");
                 return;
             }
 
@@ -442,11 +518,17 @@ function handleLogin(e) {
 function setupMemberDashboard() {
     if (!currentUser || currentUser.role !== 'member') return;
     document.getElementById('member-welcome-sub').innerText = `Mabuhay, ${currentUser.name}! (${currentUser.course} - ${currentUser.year})`;
-    document.getElementById('edit-prof-name').value = currentUser.name;
-    document.getElementById('edit-prof-email').value = currentUser.email;
-    document.getElementById('edit-prof-year').value = currentUser.year || "4th Year";
+    
+    document.getElementById('edit-prof-firstname').value = currentUser.firstname || currentUser.name.split(' ')[0] || '';
+    document.getElementById('edit-prof-middlename').value = currentUser.middlename || '';
+    document.getElementById('edit-prof-lastname').value = currentUser.lastname || currentUser.name.split(' ').slice(-1)[0] || '';
+    document.getElementById('edit-prof-email').value = currentUser.email || '';
+    document.getElementById('edit-prof-dob').value = currentUser.dob || '';
+    document.getElementById('edit-prof-age').value = currentUser.age || '';
+    document.getElementById('edit-prof-year').value = currentUser.year || "1st Year";
     document.getElementById('edit-prof-course').value = currentUser.course || "BS in Information Technology";
     document.getElementById('edit-prof-reason').value = currentUser.reason || "";
+    
     if (currentUser.pic) {
         document.getElementById('profile-display-img').src = currentUser.pic;
     }
@@ -468,11 +550,22 @@ function previewProfilePic(e) {
 function handleSaveMemberProfile(e) {
     e.preventDefault();
     if (!currentUser) return;
-    currentUser.name = document.getElementById('edit-prof-name').value;
+    
+    const fname = document.getElementById('edit-prof-firstname').value.trim();
+    const mname = document.getElementById('edit-prof-middlename').value.trim();
+    const lname = document.getElementById('edit-prof-lastname').value.trim();
+    
+    currentUser.firstname = fname;
+    currentUser.middlename = mname;
+    currentUser.lastname = lname;
+    currentUser.name = `${fname} ${mname ? mname + ' ' : ''}${lname}`;
     currentUser.email = document.getElementById('edit-prof-email').value;
+    currentUser.dob = document.getElementById('edit-prof-dob').value;
+    currentUser.age = document.getElementById('edit-prof-age').value;
     currentUser.year = document.getElementById('edit-prof-year').value;
     currentUser.course = document.getElementById('edit-prof-course').value;
     currentUser.reason = document.getElementById('edit-prof-reason').value;
+    
     if (temporaryProfilePic) {
         currentUser.pic = temporaryProfilePic;
     }
@@ -493,63 +586,120 @@ function handleSaveMemberProfile(e) {
     renderAll();
 }
 
-let memberTemporaryMedia = [];
-function previewMemberMedia(e) {
-    const files = e.target.files;
-    const container = document.getElementById('mem-media-preview');
-    container.innerHTML = '';
-    memberTemporaryMedia = [];
-    
-    const maxFiles = Math.min(files.length, 500);
-    for (let i = 0; i < maxFiles; i++) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            memberTemporaryMedia.push(evt.target.result);
-            if (container.children.length < 50) {
-                const el = document.createElement(files[i].type.startsWith('video') ? 'video' : 'img');
-                el.src = evt.target.result;
-                el.className = 'preview-thumb';
-                container.appendChild(el);
-            }
-        };
-        reader.readAsDataURL(files[i]);
+function generateRandomMeetingCode() {
+    const code = 'ECA-' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('admin-meeting-code').value = code;
+}
+
+function handleCreateMeetingCode(e) {
+    e.preventDefault();
+    const title = document.getElementById('admin-meeting-title').value.trim();
+    const code = document.getElementById('admin-meeting-code').value.trim();
+    if (!code) {
+        showCustomErrorModal("Please generate or enter a meeting code first.");
+        return;
+    }
+
+    const meetingId = 'meet_' + Date.now();
+    const meetingObj = {
+        id: meetingId,
+        title,
+        code,
+        date: new Date().toLocaleDateString(),
+        status: "Active"
+    };
+
+    db.ref('meeting_codes/' + meetingId).set(meetingObj).then(() => {
+        alert(`Meeting code "${code}" successfully posted and activated for members!`);
+        document.getElementById('admin-create-meeting-form').reset();
+    });
+}
+
+function deleteMeetingCode(id) {
+    if (!currentUser || currentUser.role !== 'admin') return;
+    if (confirm("Delete this meeting code record?")) {
+        db.ref('meeting_codes/' + id).remove();
     }
 }
 
-// MEMBER POST WITH LOADING SPINNER
-function handleMemberPost(e) {
+function handleMemberAttendanceCodeSubmit(e) {
     e.preventDefault();
-    const submitBtn = document.getElementById('member-post-submit-btn');
-    submitBtn.querySelector('.btn-text').style.display = 'none';
-    submitBtn.querySelector('.spinner').style.display = 'inline-block';
-    submitBtn.disabled = true;
+    if (!currentUser || currentUser.role !== 'member') {
+        showCustomErrorModal("Please login as a member to record meeting attendance.");
+        return;
+    }
 
-    const title = document.getElementById('mem-post-title').value;
-    const date = document.getElementById('mem-post-date').value;
-    const venue = document.getElementById('mem-post-venue').value;
-    const description = document.getElementById('mem-post-desc').value;
+    const inputCode = document.getElementById('member-input-code').value.trim().toUpperCase();
+    
+    const matchingMeeting = meetingCodesList.find(m => m.code === inputCode && m.status === "Active");
+    if (!matchingMeeting) {
+        showCustomErrorModal("Error! Invalid or inactive meeting attendance code. Please enter the correct code posted by admin.");
+        return;
+    }
 
-    setTimeout(() => {
-        const postId = 'post_' + Date.now();
-        const newPost = {
-            id: postId,
-            title, date, venue, description,
-            author: currentUser ? currentUser.name : "Member",
-            photos: [...memberTemporaryMedia],
-            reactions: { like: 0, heart: 0 },
-            comments: []
-        };
+    const alreadyLogged = attendanceLogs.some(log => log.email === currentUser.email && log.meetingId === matchingMeeting.id);
+    if (alreadyLogged) {
+        showCustomErrorModal("You have already recorded your attendance for this meeting!");
+        return;
+    }
 
-        db.ref('activities/' + postId).set(newPost).then(() => {
-            document.getElementById('member-post-form').reset();
-            document.getElementById('mem-media-preview').innerHTML = '';
-            memberTemporaryMedia = [];
-            submitBtn.querySelector('.btn-text').style.display = 'inline-block';
-            submitBtn.querySelector('.spinner').style.display = 'none';
-            submitBtn.disabled = false;
-            alert("Post published successfully with Firebase database sync!");
-        });
-    }, 600);
+    const now = new Date();
+    const attendanceRecordId = 'att_meet_' + Date.now();
+    const attendanceRecord = {
+        id: attendanceRecordId,
+        meetingId: matchingMeeting.id,
+        meetingTitle: matchingMeeting.title,
+        name: currentUser.name,
+        email: currentUser.email,
+        date: now.toLocaleDateString(),
+        timeLogged: now.toLocaleTimeString(),
+        status: "Present",
+        type: "Meeting Code Entry"
+    };
+
+    db.ref('attendance/' + attendanceRecordId).set(attendanceRecord).then(() => {
+        alert(`Success! Your attendance for "${matchingMeeting.title}" has been marked as Present.`);
+        document.getElementById('member-attendance-code-form').reset();
+        renderAll();
+    });
+}
+
+function populateAdminRecipientSelect() {
+    const selectEl = document.getElementById('admin-msg-recipient');
+    if (!selectEl) return;
+    
+    let html = `<option value="ALL">ALL MEMBERS (Broadcast Notice)</option>`;
+    members.forEach(m => {
+        html += `<option value="${m.email}">${m.name} (${m.email})</option>`;
+    });
+    selectEl.innerHTML = html;
+}
+
+function handleAdminSendMessage(e) {
+    e.preventDefault();
+    const recipient = document.getElementById('admin-msg-recipient').value;
+    const subject = document.getElementById('admin-msg-subject').value.trim();
+    const content = document.getElementById('admin-msg-content').value.trim();
+
+    const msgId = 'msg_' + Date.now();
+    const msgObj = {
+        id: msgId,
+        recipient,
+        subject,
+        content,
+        date: new Date().toLocaleString(),
+        read: false
+    };
+
+    db.ref('messages/' + msgId).set(msgObj).then(() => {
+        alert("Message / Notice sent successfully to member inbox!");
+        document.getElementById('admin-send-msg-form').reset();
+    });
+}
+
+function deleteAdminMessage(id) {
+    if (!currentUser || currentUser.role !== 'admin') return;
+    db.ref('messages/' + id).remove();
 }
 
 function addReaction(postId, type) {
@@ -638,7 +788,6 @@ function previewDocument(title, url, category) {
     openModal('document-preview-modal');
 }
 
-// OFFICERS MANAGER
 let temporaryOfficerPhoto = "";
 function previewOfficerPhoto(e) {
     const file = e.target.files[0];
@@ -653,7 +802,7 @@ function previewOfficerPhoto(e) {
 }
 
 function openOfficerModal(id = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('officer-edit-id').value = '';
     document.getElementById('officer-form').reset();
     document.getElementById('officer-photo-preview').src = 'image/ECA~2.jpg';
@@ -695,13 +844,12 @@ function handleSaveOfficer(e) {
 }
 
 function deleteOfficer(id) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Are you sure you want to delete this officer?")) {
         db.ref('officers/' + id).remove().then(() => alert("Officer deleted successfully."));
     }
 }
 
-// ACTIVITIES MANAGER
 let temporarySelectedPhotos = [];
 function previewActivityPhotos(e) {
     const files = e.target.files;
@@ -727,7 +875,7 @@ function previewActivityPhotos(e) {
 }
 
 function openActivityModal(id = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('act-edit-id').value = '';
     document.getElementById('activity-form').reset();
     document.getElementById('act-photo-preview-container').innerHTML = '';
@@ -789,7 +937,7 @@ function handleSaveActivity(e) {
             submitBtn.disabled = false;
             alert("Activity published successfully with all photos synchronized to Firebase!");
         }).catch(err => {
-            alert("Publishing error: " + err.message);
+            showCustomErrorModal("Publishing error: " + err.message);
             submitBtn.querySelector('.btn-text').style.display = 'inline-block';
             submitBtn.querySelector('.spinner').style.display = 'none';
             submitBtn.disabled = false;
@@ -798,14 +946,14 @@ function handleSaveActivity(e) {
 }
 
 function deleteActivity(id) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Delete this activity post?")) {
         db.ref('activities/' + id).remove().then(() => alert("Activity deleted successfully."));
     }
 }
 
 function openDocumentModal(id = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('doc-edit-id').value = '';
     document.getElementById('document-form').reset();
     if (id) {
@@ -843,14 +991,14 @@ function handleSaveDocument(e) {
 }
 
 function deleteDocument(id) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Delete this document?")) {
         db.ref('documents/' + id).remove();
     }
 }
 
 function openVideoModal(id = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('vid-edit-index').value = '';
     document.getElementById('video-form').reset();
     if (id !== null) {
@@ -890,7 +1038,7 @@ function handleSaveVideo(e) {
 }
 
 function deleteVideo(index) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Delete this video?")) {
         advocacyVideos.splice(index, 1);
         db.ref('videos').set(advocacyVideos);
@@ -898,7 +1046,7 @@ function deleteVideo(index) {
 }
 
 function openFaqModal(index = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('faq-edit-index').value = '';
     document.getElementById('faq-form').reset();
     if (index !== null) {
@@ -932,7 +1080,7 @@ function handleSaveFaq(e) {
 }
 
 function deleteFaq(index) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Delete this FAQ?")) {
         faqList.splice(index, 1);
         db.ref('faqs').set(faqList);
@@ -940,7 +1088,7 @@ function deleteFaq(index) {
 }
 
 function openAnnouncementModal(id = null) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     document.getElementById('announcement-edit-id').value = '';
     document.getElementById('announcement-form').reset();
     if (id) {
@@ -973,14 +1121,14 @@ function handleSaveAnnouncement(e) {
 }
 
 function deleteAnnouncement(id) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Delete this announcement?")) {
         db.ref('announcements/' + id).remove();
     }
 }
 
 function terminateMember(id) {
-    if (!currentUser || currentUser.role !== 'admin') { alert("Restricted: Admin only."); return; }
+    if (!currentUser || currentUser.role !== 'admin') { showCustomErrorModal("Restricted: Admin only."); return; }
     if (confirm("Are you sure you want to terminate/remove this member?")) {
         db.ref('members').once('value', snapshot => {
             const mems = snapshot.val();
@@ -1040,7 +1188,7 @@ function setRating(score) {
 function handleRatingSubmit(e) {
     e.preventDefault();
     if (currentSelectedRating === 0) {
-        alert("Please select a star rating first!");
+        showCustomErrorModal("Please select a star rating first!");
         return;
     }
     const feedback = document.getElementById('user-feedback-text').value;
@@ -1075,7 +1223,6 @@ function handleBugReport(e) {
 function renderAll() {
     const isAdmin = currentUser && currentUser.role === 'admin';
 
-    // RENDER OFFICERS
     const officersContainer = document.getElementById('officers-container');
     if (officersContainer) {
         officersContainer.innerHTML = officersList.map(officer => `
@@ -1104,7 +1251,6 @@ function renderAll() {
         `).join('');
     }
 
-    // ATTENDANCE LOGS
     const adminAttendanceTable = document.getElementById('admin-attendance-table');
     if (adminAttendanceTable) {
         if (attendanceLogs.length === 0) {
@@ -1115,15 +1261,77 @@ function renderAll() {
                     <td>${log.name}</td>
                     <td>${log.email}</td>
                     <td>${log.date}</td>
-                    <td>${log.timeIn}</td>
-                    <td>${log.timeOut}</td>
-                    <td><span class="badge ${log.status === 'Signed In' ? 'btn-success' : 'btn-secondary'}">${log.status}</span></td>
+                    <td>${log.meetingTitle || log.type || 'General'}</td>
+                    <td>${log.timeIn || log.timeLogged || ''}</td>
+                    <td><span class="badge ${log.status === 'Present' || log.status === 'Completed' ? 'btn-success' : 'btn-secondary'}">${log.status}</span></td>
                 </tr>
             `).join('');
         }
     }
 
-    // HOMEPAGE RATINGS
+    const memberPersonalAttendanceTable = document.getElementById('member-personal-attendance-table');
+    if (memberPersonalAttendanceTable && currentUser && currentUser.role === 'member') {
+        const userLogs = attendanceLogs.filter(l => l.email === currentUser.email);
+        if (userLogs.length === 0) {
+            memberPersonalAttendanceTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#666;">No attendance records found for your account yet. Enter a meeting code above.</td></tr>`;
+        } else {
+            memberPersonalAttendanceTable.innerHTML = userLogs.map(l => `
+                <tr>
+                    <td>${l.meetingTitle || l.type || 'System Session'}</td>
+                    <td>${l.date}</td>
+                    <td>${l.timeLogged || l.timeIn || ''}</td>
+                    <td><span class="badge btn-success">${l.status}</span></td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    const adminMeetingCodesTable = document.getElementById('admin-meeting-codes-table');
+    if (adminMeetingCodesTable) {
+        if (meetingCodesList.length === 0) {
+            adminMeetingCodesTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#666;">No meeting codes generated yet.</td></tr>`;
+        } else {
+            adminMeetingCodesTable.innerHTML = meetingCodesList.map(m => `
+                <tr>
+                    <td>${m.title}</td>
+                    <td><strong style="letter-spacing:1px; color:#0056b3;">${m.code}</strong></td>
+                    <td>${m.date}</td>
+                    <td><span class="badge btn-success">${m.status}</span></td>
+                    <td><button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteMeetingCode('${m.id}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    const memberInboxContainer = document.getElementById('member-inbox-container');
+    const memberUnreadBadge = document.getElementById('member-unread-badge');
+    if (memberInboxContainer && currentUser && currentUser.role === 'member') {
+        const userMessages = messagesList.filter(msg => msg.recipient === "ALL" || msg.recipient === currentUser.email);
+        const unreadCount = userMessages.filter(msg => !msg.read).length;
+        
+        if (memberUnreadBadge) {
+            if (unreadCount > 0) {
+                memberUnreadBadge.innerText = unreadCount;
+                memberUnreadBadge.style.display = 'inline-block';
+            } else {
+                memberUnreadBadge.style.display = 'none';
+            }
+        }
+
+        if (userMessages.length === 0) {
+            memberInboxContainer.innerHTML = `<p style="color:#666; font-size:0.9rem;">No messages or notices in your inbox.</p>`;
+        } else {
+            memberInboxContainer.innerHTML = userMessages.map(msg => `
+                <div class="announcement-post-card" style="border-left-color: #28a745;">
+                    <span class="badge" style="background:#0056b3;">Admin Notice</span>
+                    <h4 style="margin-top: 5px;">${msg.subject}</h4>
+                    <small style="color: #666;"><i class="fa-solid fa-calendar"></i> ${msg.date}</small>
+                    <p style="margin-top: 8px; font-size: 0.9rem;">${msg.content}</p>
+                </div>
+            `).join('');
+        }
+    }
+
     db.ref('ratings').once('value', snap => {
         const ratingsMap = snap.val();
         const ratings = ratingsMap ? Object.values(ratingsMap) : [];
@@ -1145,7 +1353,6 @@ function renderAll() {
         }
     });
 
-    // BUG REPORTS
     db.ref('bug_reports').once('value', snap => {
         const bugsMap = snap.val();
         const bugReports = bugsMap ? Object.entries(bugsMap) : [];
@@ -1345,7 +1552,6 @@ function renderAll() {
         `).join('');
     }
 
-    // PENDING REQUESTS
     db.ref('pending').once('value', snap => {
         const pendingMap = snap.val();
         const pendingList = pendingMap ? Object.entries(pendingMap) : [];
