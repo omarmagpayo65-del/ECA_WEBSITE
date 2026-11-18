@@ -11,8 +11,48 @@
     <!-- Firebase SDK Scripts Integration -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        /* FULL-INTERFACE LOADING SPINNER OVERLAY */
+        #global-loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #global-loading-overlay .spinner-box {
+            text-align: center;
+        }
+        #global-loading-overlay i {
+            font-size: 3.5rem;
+            color: #ffc107;
+            margin-bottom: 12px;
+            animation: fa-spin 1s infinite linear;
+        }
+        #global-loading-overlay p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
 </head>
 <body class="theme-light">
+
+    <!-- FULL-INTERFACE LOADING SPINNER OVERLAY -->
+    <div id="global-loading-overlay">
+        <div class="spinner-box">
+            <i class="fa-solid fa-spinner"></i>
+            <p>Loading, please wait!...</p>
+        </div>
+    </div>
 
     <!-- TOP NAVIGATION BAR -->
     <header class="top-header">
@@ -24,22 +64,22 @@
             </div>
         </div>
         
-        <button class="hamburger-menu-btn" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Toggle Navigation">
+        <button class="hamburger-menu-btn" id="hamburger-btn" onclick="toggleMobileNav(); triggerGlobalSpinner();" aria-label="Toggle Navigation">
             <i class="fa-solid fa-bars" id="hamburger-icon"></i>
         </button>
 
         <nav class="main-nav" id="main-nav">
-            <button class="nav-btn active" onclick="showSection('home-page'); playClickSound();"><i class="fa-solid fa-house"></i> Home</button>
-            <button class="nav-btn" onclick="showSection('activities-page'); playClickSound();"><i class="fa-solid fa-newspaper"></i> Activities</button>
-            <button class="nav-btn" onclick="showSection('officers-page'); playClickSound();"><i class="fa-solid fa-users"></i> Officers</button>
-            <button class="nav-btn" onclick="showSection('documents-page'); playClickSound();"><i class="fa-solid fa-file-lines"></i> Documents</button>
-            <button class="nav-btn" onclick="showSection('videos-page'); playClickSound();"><i class="fa-solid fa-play"></i> Premier Video & FAQs</button>
-            <button class="nav-btn" onclick="showSection('about-page'); playClickSound();"><i class="fa-solid fa-circle-info"></i> About</button>
-            <button class="nav-btn" onclick="showSection('privacy-page'); playClickSound();"><i class="fa-solid fa-shield-halved"></i> Privacy</button>
-            <button class="nav-btn highlight" onclick="openModal('register-modal'); playClickSound();"><i class="fa-solid fa-user-plus"></i> Join Us</button>
-            <button class="nav-btn auth" id="auth-btn" onclick="handleAuthButtonClick()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-            <button class="nav-btn admin-badge" id="admin-toggle-btn" style="display:none;" onclick="showSection('admin-dashboard'); playClickSound();"><i class="fa-solid fa-gauge-high"></i> Admin Portal</button>
-            <button class="nav-btn" id="member-portal-btn" style="display:none;" onclick="showSection('member-dashboard'); playClickSound();"><i class="fa-solid fa-user"></i> My Profile</button>
+            <button class="nav-btn active" onclick="showSection('home-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-house"></i> Home</button>
+            <button class="nav-btn" onclick="showSection('activities-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-newspaper"></i> Activities</button>
+            <button class="nav-btn" onclick="showSection('officers-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-users"></i> Officers</button>
+            <button class="nav-btn" onclick="showSection('documents-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-file-lines"></i> Documents</button>
+            <button class="nav-btn" onclick="showSection('videos-page'); playClickSound(); triggerGlobalSpinner(); checkAllButtonsClicked();"><i class="fa-solid fa-play"></i> Premier Video & FAQs</button>
+            <button class="nav-btn" onclick="showSection('about-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-circle-info"></i> About</button>
+            <button class="nav-btn" onclick="showSection('privacy-page'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-shield-halved"></i> Privacy</button>
+            <button class="nav-btn highlight" onclick="openModal('register-modal'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user-plus"></i> Join Us</button>
+            <button class="nav-btn auth" id="auth-btn" onclick="handleAuthButtonClick(); triggerGlobalSpinner();"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+            <button class="nav-btn admin-badge" id="admin-toggle-btn" style="display:none;" onclick="showSection('admin-dashboard'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-gauge-high"></i> Admin Portal</button>
+            <button class="nav-btn" id="member-portal-btn" style="display:none;" onclick="showSection('member-dashboard'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user"></i> My Profile</button>
         </nav>
     </header>
 
@@ -52,8 +92,8 @@
                     <h2>Active Citizenship for Sustainable Change</h2>
                     <p>Join our mission to promote civic responsibility, youth leadership, and transparent community governance.</p>
                     <div class="hero-actions">
-                        <button class="btn btn-primary" onclick="openModal('register-modal'); playClickSound();"><i class="fa-solid fa-hand-holding-heart"></i> Become an Advocate Today</button>
-                        <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound();">Explore Activities</button>
+                        <button class="btn btn-primary" onclick="openModal('register-modal'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-hand-holding-heart"></i> Become an Advocate Today</button>
+                        <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound(); triggerGlobalSpinner();">Explore Activities</button>
                     </div>
                 </div>
             </div>
@@ -75,7 +115,7 @@
             <div class="section-box">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-newspaper"></i> Latest Activity Feeds & Albums</h3>
-                    <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound();">View All Activities</button>
+                    <button class="btn btn-secondary" onclick="showSection('activities-page'); playClickSound(); triggerGlobalSpinner();">View All Activities</button>
                 </div>
                 <div id="home-activity-feed" class="announcements-grid"></div>
             </div>
@@ -83,7 +123,7 @@
             <div class="section-box">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-video"></i> Featured Advocacy Videos</h3>
-                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound();">View All Videos</button>
+                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound(); triggerGlobalSpinner(); checkAllButtonsClicked();">View All Videos</button>
                 </div>
                 <div id="home-videos-grid" class="video-grid"></div>
             </div>
@@ -91,7 +131,7 @@
             <div class="section-box">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-file-lines"></i> Recent Official Documents</h3>
-                    <button class="btn btn-secondary" onclick="showSection('documents-page'); playClickSound();">View All Documents</button>
+                    <button class="btn btn-secondary" onclick="showSection('documents-page'); playClickSound(); triggerGlobalSpinner();">View All Documents</button>
                 </div>
                 <div id="home-documents-grid" class="announcements-grid"></div>
             </div>
@@ -99,7 +139,7 @@
             <div class="section-box">
                 <div class="section-header">
                     <h3><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h3>
-                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound();">View All FAQs</button>
+                    <button class="btn btn-secondary" onclick="showSection('videos-page'); playClickSound(); triggerGlobalSpinner(); checkAllButtonsClicked();">View All FAQs</button>
                 </div>
                 <div id="home-faq-container" class="faq-list"></div>
             </div>
@@ -119,14 +159,14 @@
                         <div class="form-group">
                             <textarea id="user-feedback-text" rows="2" placeholder="Optional comments or suggestions..." style="font-size: 0.85rem;" oninput="autoCapitalize(this)"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;" onclick="playClickSound()">Submit Rating</button>
+                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;" onclick="playClickSound(); triggerGlobalSpinner();">Submit Rating</button>
                     </form>
                 </div>
 
                 <div class="section-box" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
                     <h3><i class="fa-solid fa-bug" style="color: #dc3545;"></i> Encountered an Issue?</h3>
                     <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Help us improve by reporting unexpected glitches or errors on the website.</p>
-                    <button class="btn btn-danger" onclick="openModal('bug-report-modal'); playClickSound();"><i class="fa-solid fa-triangle-exclamation"></i> Report Bug</button>
+                    <button class="btn btn-danger" onclick="openModal('bug-report-modal'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-triangle-exclamation"></i> Report Bug</button>
                 </div>
             </div>
         </section>
@@ -170,9 +210,9 @@
             </div>
         </section>
 
-        <!-- MEMBER DASHBOARD SECTION -->
+        <!-- UPDATED MEMBER DASHBOARD SECTION -->
         <section id="member-dashboard" class="app-section">
-            <div class="hero-banner" style="padding: 60px 20px; margin-bottom: 20px;">
+            <div class="hero-banner" style="padding: 40px 20px; margin-bottom: 20px;">
                 <div class="hero-text">
                     <h2>Welcome to Engaged Citizenship Advocacy</h2>
                     <p id="member-welcome-sub">Mabuhay, Advocate!</p>
@@ -180,53 +220,56 @@
             </div>
 
             <div class="admin-tabs">
-                <button class="tab-btn active" onclick="showMemberTab('member-tab-feed'); playClickSound();"><i class="fa-solid fa-newspaper"></i> Community Feed & Uploads</button>
-                <button class="tab-btn" onclick="showMemberTab('member-tab-profile'); playClickSound();"><i class="fa-solid fa-id-card"></i> Edit Profile & Info</button>
+                <button class="tab-btn active" onclick="showMemberTab('member-tab-profile'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user-gear"></i> Edit Profile & Personal Info</button>
+                <button class="tab-btn" onclick="showMemberTab('member-tab-attendance'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-clipboard-user"></i> Meeting Attendance</button>
+                <button class="tab-btn" onclick="showMemberTab('member-tab-inbox'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-inbox"></i> Message Inbox <span id="member-unread-badge" class="badge" style="background:#dc3545; display:none;">0</span></button>
+                <button class="tab-btn" onclick="showMemberTab('member-tab-feed'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-newspaper"></i> Community Feed</button>
             </div>
 
-            <div id="member-tab-feed" class="admin-tab-content active">
-                <div class="section-box">
-                    <h3><i class="fa-solid fa-cloud-arrow-up"></i> Share Activity, Photos & Videos (Max 500 Pictures per post)</h3>
-                    <form id="member-post-form" onsubmit="handleMemberPost(event)">
-                        <div class="form-group"><label>Post Title / Caption</label><input type="text" id="mem-post-title" required placeholder="Ano ang iyong advocacy update?" oninput="autoCapitalize(this)"></div>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Date</label><input type="date" id="mem-post-date" required></div>
-                            <div class="form-group"><label>Venue / Location</label><input type="text" id="mem-post-venue" required placeholder="Lugar" oninput="autoCapitalize(this)"></div>
-                        </div>
-                        <div class="form-group"><label>Description</label><textarea id="mem-post-desc" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
-                        <div class="form-group"><label>Upload Images / Videos (Up to 500 files)</label><input type="file" id="mem-post-media" accept="image/*,video/*" multiple max="500" onchange="previewMemberMedia(event)">
-                            <div id="mem-media-preview" class="photo-preview-grid"></div>
-                        </div>
-                        <button type="submit" id="member-post-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
-                            <span class="btn-text">Publish Post</span>
-                            <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Submitting...</span>
-                        </button>
-                    </form>
-                </div>
-
-                <div class="section-header">
-                    <h3>Community Feed (View, React, Comment)</h3>
-                </div>
-                <div id="member-community-feed"></div>
-            </div>
-
-            <div id="member-tab-profile" class="admin-tab-content">
-                <div class="section-box" style="max-width: 600px; margin: 0 auto;">
-                    <h3>Edit Profile Picture & Personal Information</h3>
+            <!-- TAB: EDIT PROFILE & REGISTRATION INFO -->
+            <div id="member-tab-profile" class="admin-tab-content active">
+                <div class="section-box" style="max-width: 720px; margin: 0 auto;">
+                    <h3><i class="fa-solid fa-id-card"></i> Edit Profile Picture & Registration Details</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Keep your personal details up to date matching your registration form records.</p>
+                    
                     <form id="member-profile-form" onsubmit="handleSaveMemberProfile(event)">
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <img id="profile-display-img" src="image/ECA~2.jpg" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #0056b3;">
+                            <img id="profile-display-img" src="image/ECA~2.jpg" alt="Profile Picture" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #0056b3;">
                             <div style="margin-top: 10px;">
-                                <label class="btn btn-secondary" style="cursor: pointer; display: inline-block;">
+                                <label class="btn btn-secondary" style="cursor: pointer; display: inline-block; font-size: 0.85rem;">
                                     <i class="fa-solid fa-camera"></i> Change Profile Picture
                                     <input type="file" id="profile-pic-input" accept="image/*" style="display: none;" onchange="previewProfilePic(event)">
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group"><label>Full Name</label><input type="text" id="edit-prof-name" required oninput="validateLettersOnly(this); autoCapitalize(this);"></div>
-                        <div class="form-group"><label>Email Address</label><input type="email" id="edit-prof-email" required onblur="validateEmailFormat(this)"></div>
+
                         <div class="form-grid">
-                            <div class="form-group"><label>Year Level</label>
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" id="edit-prof-firstname" required oninput="validateLettersOnly(this); autoCapitalize(this);">
+                            </div>
+                            <div class="form-group">
+                                <label>Middle Name</label>
+                                <input type="text" id="edit-prof-middlename" oninput="validateLettersOnly(this); autoCapitalize(this);">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" id="edit-prof-lastname" required oninput="validateLettersOnly(this); autoCapitalize(this);">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="edit-prof-email" required onblur="validateEmailFormat(this)">
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth (DOB)</label>
+                                <input type="date" id="edit-prof-dob" required onchange="calculateEditAge()">
+                            </div>
+                            <div class="form-group">
+                                <label>Age (Auto-calculated)</label>
+                                <input type="text" id="edit-prof-age" readonly placeholder="Auto-calculated">
+                            </div>
+                            <div class="form-group">
+                                <label>Year Level</label>
                                 <select id="edit-prof-year" required>
                                     <option value="1st Year">1st Year</option>
                                     <option value="2nd Year">2nd Year</option>
@@ -234,7 +277,8 @@
                                     <option value="4th Year">4th Year</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>Course Program</label>
+                            <div class="form-group full-width">
+                                <label>Course Program</label>
                                 <select id="edit-prof-course" required>
                                     <option value="BS in Information Technology">BS in Information Technology</option>
                                     <option value="BS in Business Management">BS in Business Management</option>
@@ -246,18 +290,76 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
+                            <div class="form-group full-width">
+                                <label>Reason for Joining (Letters Only)</label>
+                                <textarea id="edit-prof-reason" rows="3" required oninput="validateLettersOnly(this); autoCapitalize(this);"></textarea>
+                            </div>
                         </div>
-                        <div class="form-group"><label>Reason of Joining</label><textarea id="edit-prof-reason" rows="3" required oninput="validateLettersOnly(this); autoCapitalize(this);"></textarea></div>
-                        <button type="submit" class="btn btn-primary btn-block" onclick="playClickSound()">Save Profile Changes</button>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;" onclick="playClickSound(); triggerGlobalSpinner();">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+                        </button>
                     </form>
                 </div>
+            </div>
+
+            <!-- TAB: MEETING ATTENDANCE MONITORING -->
+            <div id="member-tab-attendance" class="admin-tab-content">
+                <div class="section-box" style="max-width: 650px; margin: 0 auto;">
+                    <h3><i class="fa-solid fa-key"></i> Enter Admin Meeting Attendance Code</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Input the correct code generated and posted by the Admin during official meetings to mark your attendance as Present.</p>
+                    
+                    <form id="member-attendance-code-form" onsubmit="handleMemberAttendanceCodeSubmit(event)">
+                        <div class="form-group">
+                            <label>Meeting Attendance Code:</label>
+                            <input type="text" id="member-input-code" placeholder="e.g. ECA-9824" required style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold; text-align: center; font-size: 1.1rem;" oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block" onclick="playClickSound(); triggerGlobalSpinner();">
+                            <i class="fa-solid fa-check-double"></i> Submit Code & Record Attendance
+                        </button>
+                    </form>
+                </div>
+
+                <div class="section-box" style="margin-top: 20px;">
+                    <h3><i class="fa-solid fa-list-check"></i> My Meeting Attendance History</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Title</th>
+                                    <th>Date</th>
+                                    <th>Time Logged</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-personal-attendance-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: MESSAGE INBOX -->
+            <div id="member-tab-inbox" class="admin-tab-content">
+                <div class="section-box">
+                    <h3><i class="fa-solid fa-inbox"></i> Admin Messages & Official Notices</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">View direct messages and general announcements sent to your account by the ECA Admin team.</p>
+                    <div id="member-inbox-container"></div>
+                </div>
+            </div>
+
+            <!-- TAB: COMMUNITY FEED (VIEW & INTERACT) -->
+            <div id="member-tab-feed" class="admin-tab-content">
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-newspaper"></i> Community Feed (View, React & Comment)</h3>
+                </div>
+                <div id="member-community-feed"></div>
             </div>
         </section>
 
         <section id="activities-page" class="app-section">
             <div class="section-header">
                 <h2>Advocacy Activities</h2>
-                <button class="btn btn-primary admin-only" id="top-post-activity-btn" style="display:none;" onclick="openActivityModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Post Activity (Admin Only)</button>
+                <button class="btn btn-primary admin-only" id="top-post-activity-btn" style="display:none;" onclick="openActivityModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-plus"></i> Post Activity (Admin Only)</button>
             </div>
             <div id="activity-posts-feed"></div>
         </section>
@@ -273,7 +375,7 @@
         <section id="documents-page" class="app-section">
             <div class="section-header">
                 <h2>Document Records & Memorandums</h2>
-                <button class="btn btn-primary admin-only" id="top-upload-doc-btn" style="display:none;" onclick="openDocumentModal(); playClickSound();"><i class="fa-solid fa-upload"></i> Upload Record (Admin Only)</button>
+                <button class="btn btn-primary admin-only" id="top-upload-doc-btn" style="display:none;" onclick="openDocumentModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-upload"></i> Upload Record (Admin Only)</button>
             </div>
             <div class="table-responsive">
                 <table class="data-table">
@@ -288,14 +390,14 @@
         <section id="videos-page" class="app-section">
             <div class="section-header">
                 <h2>Advocacy Premier & Tutorial FAQs</h2>
-                <button class="btn btn-primary admin-only" id="top-upload-video-btn" style="display:none;" onclick="openVideoModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Upload Primer Video (Admin Only)</button>
+                <button class="btn btn-primary admin-only" id="top-upload-video-btn" style="display:none;" onclick="openVideoModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-plus"></i> Upload Primer Video (Admin Only)</button>
             </div>
             <h3>Advocacy Video Library</h3>
             <div class="video-grid" id="all-videos-grid"></div>
 
             <div class="section-header" style="margin-top: 40px;">
                 <h3>Frequently Asked Questions & Tutorials</h3>
-                <button class="btn btn-primary admin-only" id="top-add-faq-btn" style="display:none;" onclick="openFaqModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Add FAQ (Admin Only)</button>
+                <button class="btn btn-primary admin-only" id="top-add-faq-btn" style="display:none;" onclick="openFaqModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-plus"></i> Add FAQ (Admin Only)</button>
             </div>
             <div class="faq-list" id="faq-container"></div>
         </section>
@@ -306,140 +408,237 @@
                 <h2><i class="fa-solid fa-gauge"></i> Admin Superior Control Center (Restricted)</h2>
             </div>
 
-            <div class="admin-tabs">
-                <button class="tab-btn active" onclick="showAdminTab('tab-members'); playClickSound();">Member Directory</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-attendance'); playClickSound();">Member Attendance Logs</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-officers-admin'); playClickSound();">Officers Manager</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-announcements-admin'); playClickSound();">Announcements</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-activities-admin'); playClickSound();">Activities Manager</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-documents-admin'); playClickSound();">Documents Manager</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-videos-admin'); playClickSound();">Video Manager</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-faq-admin'); playClickSound();">FAQ Manager</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-pending'); playClickSound();">Pending Registrations</button>
-                <button class="tab-btn" onclick="showAdminTab('tab-bugs'); playClickSound();">Report Bug Inbox</button>
-            </div>
+            <!-- SIDEBAR LAYOUT CONTAINER -->
+            <div class="admin-dashboard-container">
+                <!-- LEFT SIDEBAR CONTROL MANAGER -->
+                <aside class="admin-sidebar">
+                    <div class="admin-sidebar-header">
+                        <i class="fa-solid fa-sliders"></i> Control Managers
+                    </div>
+                    <nav class="admin-sidebar-nav">
+                        <button class="tab-btn active" onclick="showAdminTab('tab-members'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-users"></i> Member Directory</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-meeting-codes'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-key"></i> Meeting Code Generator</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-send-messages'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-paper-plane"></i> Send User Messages</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-attendance'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-clipboard-user"></i> Member Attendance Logs</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-officers-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user-tie"></i> Officers Manager</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-announcements-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-bullhorn"></i> Announcements</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-activities-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-chart-line"></i> Activities Manager</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-documents-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-file-lines"></i> Documents Manager</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-videos-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-video"></i> Video Manager</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-faq-admin'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-circle-question"></i> FAQ Manager</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-pending'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user-clock"></i> Pending Registrations</button>
+                        <button class="tab-btn" onclick="showAdminTab('tab-bugs'); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-bug"></i> Report Bug Inbox</button>
+                    </nav>
+                </aside>
 
-            <div id="tab-members" class="admin-tab-content active">
-                <h3>All Member User Accounts (Firebase DB Synchronized)</h3>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Name</th><th>Email</th><th>Course & Year</th><th>Status</th><th>Action</th></tr></thead>
-                        <tbody id="admin-members-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                <!-- RIGHT MAIN CONTENT PANEL -->
+                <div class="admin-content-panel">
+                    <div id="tab-members" class="admin-tab-content active">
+                        <h3>All Member User Accounts (Firebase DB Synchronized)</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Name</th><th>Email</th><th>Course & Year</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="admin-members-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-attendance" class="admin-tab-content">
-                <h3>Viewable Member Sign-in Attendance Logs (Time In / Time Out & Date)</h3>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Member Name</th><th>Email</th><th>Date</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
-                        <tbody id="admin-attendance-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <!-- ADMIN TAB: MEETING CODE GENERATOR -->
+                    <div id="tab-meeting-codes" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Generate Meeting Attendance Code</h3>
+                        </div>
+                        <div class="section-box" style="max-width: 600px;">
+                            <form id="admin-create-meeting-form" onsubmit="handleCreateMeetingCode(event)">
+                                <div class="form-group">
+                                    <label>Meeting Title / Event Name:</label>
+                                    <input type="text" id="admin-meeting-title" required placeholder="e.g., Monthly General Assembly" oninput="autoCapitalize(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Generated Attendance Code:</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="text" id="admin-meeting-code" required placeholder="Click generate button" readonly style="font-weight: bold; letter-spacing: 2px;">
+                                        <button type="button" class="btn btn-secondary" onclick="generateRandomMeetingCode(); triggerGlobalSpinner();"><i class="fa-solid fa-arrows-rotate"></i> Generate Code</button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();"><i class="fa-solid fa-bullhorn"></i> Post & Activate Meeting Code</button>
+                            </form>
+                        </div>
 
-            <div id="tab-officers-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Leadership Officers Management</h3>
-                    <button class="btn btn-primary" onclick="openOfficerModal(); playClickSound();"><i class="fa-solid fa-user-plus"></i> Create Officer</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Photo</th><th>Name</th><th>Position</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-officers-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                        <h3 style="margin-top: 20px;">Active & Past Generated Meeting Codes</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Code</th>
+                                        <th>Date Created</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-meeting-codes-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-announcements-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Announcements Management</h3>
-                    <button class="btn btn-primary" onclick="openAnnouncementModal(); playClickSound();"><i class="fa-solid fa-bullhorn"></i> Post Announcement</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Title</th><th>Date</th><th>Content</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-announcements-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <!-- ADMIN TAB: SEND USER MESSAGES / NOTICES -->
+                    <div id="tab-send-messages" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Send Direct Message / Notice to User Inbox</h3>
+                        </div>
+                        <div class="section-box" style="max-width: 650px;">
+                            <form id="admin-send-msg-form" onsubmit="handleAdminSendMessage(event)">
+                                <div class="form-group">
+                                    <label>Select Target Recipient Member:</label>
+                                    <select id="admin-msg-recipient" required>
+                                        <option value="ALL">ALL MEMBERS (Broadcast Notice)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Subject / Message Title:</label>
+                                    <input type="text" id="admin-msg-subject" required placeholder="Subject..." oninput="autoCapitalize(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Notice / Message Content:</label>
+                                    <textarea id="admin-msg-content" rows="4" required placeholder="Write official message..." oninput="autoCapitalize(this)"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();"><i class="fa-solid fa-paper-plane"></i> Send Message to Member Inbox</button>
+                            </form>
+                        </div>
+                    </div>
 
-            <div id="tab-activities-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Activities Post & Album Management </h3>
-                    <button class="btn btn-primary" onclick="openActivityModal(); playClickSound();"><i class="fa-solid fa-circle-plus"></i> Create Activity Post</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Title</th><th>Date</th><th>Venue</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-activities-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <div id="tab-attendance" class="admin-tab-content">
+                        <h3>Viewable Member Sign-in & Code Attendance Logs</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Member Name</th><th>Email</th><th>Date</th><th>Type / Meeting</th><th>Time Logged</th><th>Status</th></tr></thead>
+                                <tbody id="admin-attendance-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-documents-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Document Records Management</h3>
-                    <button class="btn btn-primary" onclick="openDocumentModal(); playClickSound();"><i class="fa-solid fa-upload"></i> Upload New Document</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Category</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-documents-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <div id="tab-officers-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Leadership Officers Management</h3>
+                            <button class="btn btn-primary" onclick="openOfficerModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-user-plus"></i> Create Officer</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Photo</th><th>Name</th><th>Position</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-officers-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-videos-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Premier Video Management</h3>
-                    <button class="btn btn-primary" onclick="openVideoModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Upload Video</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-videos-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <div id="tab-announcements-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Announcements Management</h3>
+                            <button class="btn btn-primary" onclick="openAnnouncementModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-bullhorn"></i> Post Announcement</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Title</th><th>Date</th><th>Content</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-announcements-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-faq-admin" class="admin-tab-content">
-                <div class="section-header">
-                    <h3>Frequently Asked Questions Management</h3>
-                    <button class="btn btn-primary" onclick="openFaqModal(); playClickSound();"><i class="fa-solid fa-plus"></i> Add FAQ</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Question</th><th>Answer</th><th>Actions</th></tr></thead>
-                        <tbody id="admin-faq-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <div id="tab-activities-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Activities Post & Album Management</h3>
+                            <button class="btn btn-primary" onclick="openActivityModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-circle-plus"></i> Create Activity Post</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Title</th><th>Date</th><th>Venue</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-activities-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-pending" class="admin-tab-content">
-                <h3>Pending Registration Requests</h3>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Full Name</th><th>Email</th><th>Course & Year</th><th>Reason</th><th>Action</th></tr></thead>
-                        <tbody id="pending-requests-table"></tbody>
-                    </table>
-                </div>
-            </div>
+                    <div id="tab-documents-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Document Records Management</h3>
+                            <button class="btn btn-primary" onclick="openDocumentModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-upload"></i> Upload New Document</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Category</th><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-documents-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-            <div id="tab-bugs" class="admin-tab-content">
-                <h3>Viewable Report Bug Message Inbox</h3>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead><tr><th>Date Reported</th><th>Bug Description / Issue</th><th>Action</th></tr></thead>
-                        <tbody id="admin-bug-reports-table"></tbody>
-                    </table>
+                    <div id="tab-videos-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Premier Video Management</h3>
+                            <button class="btn btn-primary" onclick="openVideoModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-plus"></i> Upload Video</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-videos-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-faq-admin" class="admin-tab-content">
+                        <div class="section-header">
+                            <h3>Frequently Asked Questions Management</h3>
+                            <button class="btn btn-primary" onclick="openFaqModal(); playClickSound(); triggerGlobalSpinner();"><i class="fa-solid fa-plus"></i> Add FAQ</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Question</th><th>Answer</th><th>Actions</th></tr></thead>
+                                <tbody id="admin-faq-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-pending" class="admin-tab-content">
+                        <h3>Pending Registration Requests</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Full Name</th><th>Email</th><th>Course & Year</th><th>Reason</th><th>Action</th></tr></thead>
+                                <tbody id="pending-requests-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-bugs" class="admin-tab-content">
+                        <h3>Viewable Report Bug Message Inbox</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead><tr><th>Date Reported</th><th>Bug Description / Issue</th><th>Action</th></tr></thead>
+                                <tbody id="admin-bug-reports-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- ERROR MODAL (Dynamically triggered on form validation failures) -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content" style="text-align: center; max-width: 400px; padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);">
+            <div style="background-color: #dc3545; padding: 25px 20px; position: relative; color: white;">
+                <span class="close-btn" onclick="closeModal('error-modal')" style="color: white; right: 15px; top: 10px; font-size: 1.5rem;">&times;</span>
+                <div style="width: 75px; height: 75px; border: 3px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 2.2rem; background: rgba(255,255,255,0.1);">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </div>
+            <div style="background: white; padding: 25px 20px; color: #333;">
+                <h2 style="color: #1b365d; font-size: 1.6rem; margin-bottom: 10px; font-weight: 700;">Ooops!</h2>
+                <p id="error-modal-message" style="color: #666; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">Something went wrong. Please check your inputs.</p>
+                <button class="btn" style="background-color: #ffc107; color: #1b365d; font-weight: 700; width: 100%; padding: 10px; border-radius: 6px;" onclick="closeModal('error-modal')">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    
     <!-- MODALS -->
     <div id="thankyou-sticker-modal" class="modal">
         <div class="modal-content" style="text-align: center; max-width: 400px;">
@@ -448,7 +647,7 @@
                 <div class="sticker-icon"><i class="fa-solid fa-circle-check"></i></div>
                 <h2 style="color: #1b365d; margin-bottom: 10px;">Thank You!</h2>
                 <p style="color: #666; margin-bottom: 20px;">Your rating and feedback have been successfully submitted.</p>
-                <button class="btn btn-primary btn-block" onclick="closeModal('thankyou-sticker-modal')">Close</button>
+                <button class="btn btn-primary btn-block" onclick="closeModal('thankyou-sticker-modal'); triggerGlobalSpinner();">Close</button>
             </div>
         </div>
     </div>
@@ -462,7 +661,7 @@
                     <label>Describe the bug or unexpected behavior:</label>
                     <textarea id="bug-desc-input" rows="4" required placeholder="Please provide details about what went wrong..." oninput="autoCapitalize(this)"></textarea>
                 </div>
-                <button type="submit" class="btn btn-danger btn-block">Send Bug Report</button>
+                <button type="submit" class="btn btn-danger btn-block" onclick="triggerGlobalSpinner();">Send Bug Report</button>
             </form>
         </div>
     </div>
@@ -482,7 +681,7 @@
                         <img id="officer-photo-preview" src="image/ECA~2.jpg" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Save Officer</button>
+                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();">Save Officer</button>
             </form>
         </div>
     </div>
@@ -492,7 +691,7 @@
         <div class="lightbox-content" onclick="event.stopPropagation()">
             <img id="lightbox-img-element" src="" alt="Enlarged Album Photo">
             <div class="lightbox-actions">
-                <a id="lightbox-download-btn" href="" download="eca-photo.jpg" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Photo</a>
+                <a id="lightbox-download-btn" href="" download="eca-photo.jpg" class="btn btn-primary" onclick="triggerGlobalSpinner();"><i class="fa-solid fa-download"></i> Download Photo</a>
             </div>
         </div>
     </div>
@@ -506,8 +705,8 @@
                 <div id="doc-preview-frame-container" style="margin-top: 15px;"></div>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                <a id="doc-modal-download-btn" href="" download class="btn btn-success btn-block"><i class="fa-solid fa-download"></i> Download Document</a>
-                <button class="btn btn-secondary btn-block" onclick="closeModal('document-preview-modal')">Close</button>
+                <a id="doc-modal-download-btn" href="" download class="btn btn-success btn-block" onclick="triggerGlobalSpinner();"><i class="fa-solid fa-download"></i> Download Document</a>
+                <button class="btn btn-secondary btn-block" onclick="closeModal('document-preview-modal'); triggerGlobalSpinner();">Close</button>
             </div>
         </div>
     </div>
@@ -521,7 +720,7 @@
                 <div class="form-group"><label>Announcement Title:</label><input type="text" id="announcement-title" required oninput="autoCapitalize(this)"></div>
                 <div class="form-group"><label>Date:</label><input type="date" id="announcement-date" required></div>
                 <div class="form-group"><label>Content / Message:</label><textarea id="announcement-content" rows="4" required oninput="autoCapitalize(this)"></textarea></div>
-                <button type="submit" class="btn btn-primary btn-block">Publish Announcement</button>
+                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();">Publish Announcement</button>
             </form>
         </div>
     </div>
@@ -541,7 +740,7 @@
                     <input type="file" id="act-photos" accept="image/*,video/*" multiple max="500" onchange="previewActivityPhotos(event)">
                     <div id="act-photo-preview-container" class="photo-preview-grid"></div>
                 </div>
-                <button type="submit" id="admin-publish-act-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                <button type="submit" id="admin-publish-act-btn" class="btn btn-primary btn-block" onclick="playClickSound(); triggerGlobalSpinner();">
                     <span class="btn-text">Publish Activity</span>
                     <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Publishing Photos...</span>
                 </button>
@@ -558,7 +757,7 @@
                 <div class="form-group"><label>Category:</label><input type="text" id="doc-category" required placeholder="Hal. Resolution, Memo" oninput="autoCapitalize(this)"></div>
                 <div class="form-group"><label>Title / Description:</label><input type="text" id="doc-title" required placeholder="Pamagat ng dokumento" oninput="autoCapitalize(this)"></div>
                 <div class="form-group"><label>Document Link / File URL or Data:</label><input type="text" id="doc-url" required placeholder="https://... o text/file path"></div>
-                <button type="submit" class="btn btn-primary btn-block">Save Document</button>
+                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();">Save Document</button>
             </form>
         </div>
     </div>
@@ -572,7 +771,7 @@
                 <div class="form-group"><label>Video Title:</label><input type="text" id="vid-title" required oninput="autoCapitalize(this)"></div>
                 <div class="form-group"><label>YouTube Embed URL:</label><input type="text" id="vid-url" required placeholder="https://www.youtube.com/embed/ID"></div>
                 <div class="form-group"><label>Description:</label><textarea id="vid-desc" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
-                <button type="submit" class="btn btn-primary btn-block">Save Video</button>
+                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();">Save Video</button>
             </form>
         </div>
     </div>
@@ -585,7 +784,7 @@
                 <input type="hidden" id="faq-edit-index">
                 <div class="form-group"><label>Question:</label><input type="text" id="faq-question" required oninput="autoCapitalize(this)"></div>
                 <div class="form-group"><label>Answer:</label><textarea id="faq-answer" rows="3" required oninput="autoCapitalize(this)"></textarea></div>
-                <button type="submit" class="btn btn-primary btn-block">Save FAQ</button>
+                <button type="submit" class="btn btn-primary btn-block" onclick="triggerGlobalSpinner();">Save FAQ</button>
             </form>
         </div>
     </div>
@@ -609,10 +808,10 @@
                     </span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 8px;">
-                    <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="triggerBiometricLogin()"><i class="fa-solid fa-fingerprint"></i> Biometric Login</button>
+                    <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="triggerBiometricLogin(); triggerGlobalSpinner();"><i class="fa-solid fa-fingerprint"></i> Biometric Login</button>
                     <a href="#" onclick="alert('Password reset link sent to your email.'); return false;" style="font-size: 0.85rem; color: #0056b3; text-decoration: none;">Forgot Password?</a>
                 </div>
-                <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound(); triggerGlobalSpinner();">
                     <span class="btn-text">Login</span>
                     <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Authenticating...</span>
                 </button>
@@ -695,7 +894,7 @@
                         <input type="checkbox" id="reg-terms" required> I agree to the <a href="#" onclick="alert('Terms & Conditions: Respect community rules and engage in active advocacy.'); return false;">Terms & Conditions</a>
                     </label>
                 </div>
-                <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound()">
+                <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block" onclick="playClickSound(); triggerGlobalSpinner();">
                     <span class="btn-text">Submit Application Direct to Admin</span>
                     <span class="spinner" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> Submitting to Firebase...</span>
                 </button>
@@ -725,6 +924,18 @@
         </div>
     </footer>
 
+    <script>
+        // GLOBAL FULL-INTERFACE SPINNER HELPER FUNCTIONS
+        function triggerGlobalSpinner() {
+            const overlay = document.getElementById('global-loading-overlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 900);
+            }
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
